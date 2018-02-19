@@ -1,0 +1,49 @@
+﻿<Application x:Class="TLKAPP.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:sys="clr-namespace:System;assembly=mscorlib"
+             xmlns:tlktype="clr-namespace:TLKVIEWMODLES.Type;assembly=TLKVIEWMODLES"
+             xmlns:tlkcmd="clr-namespace:TLKVIEWMODLES.Commands;assembly=TLKVIEWMODLES"
+             StartupUri="Views/BaseWindow.xaml">
+    <Application.Resources>
+
+        <ObjectDataProvider x:Key="FilterType" MethodName="GetValues" ObjectType="{x:Type sys:Enum}">
+            <ObjectDataProvider.MethodParameters>
+                <x:Type TypeName="tlktype:FilterType"/>
+            </ObjectDataProvider.MethodParameters>
+        </ObjectDataProvider>
+
+        <tlktype:FilterType x:Key="FilterText">Text</tlktype:FilterType>
+        <tlktype:FilterType x:Key="FilterIndex">Index</tlktype:FilterType>
+
+        <DataTemplate x:Key="CustomTabHeader">
+            <WrapPanel Margin="0,2,0,0">
+                <TextBlock Text="{Binding TabHeader}" Margin="0,0,4,0" MinWidth="24"/>
+                <Button Content="X" FontWeight="Bold" Padding="4,0,4,0" Command="{tlkcmd:TabCloseCommand}"
+                        CommandParameter="{Binding RelativeSource={RelativeSource Self}, Path=DataContext}"/>
+            </WrapPanel>
+        </DataTemplate>
+
+        <Style x:Key="OnOffToggleStyle" TargetType="ToggleButton">
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type ToggleButton}">
+                        <ContentPresenter />
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsChecked" Value="True">
+                    <Setter Property="Content" Value="▲">
+                    </Setter>
+                </Trigger>
+                <Trigger Property="IsChecked" Value="False">
+                    <Setter Property="Content" Value="▼">
+                    </Setter>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+    </Application.Resources>
+</Application>

@@ -1,0 +1,17 @@
+﻿<Window 
+    x:Class="TLKAPP.Views.BaseWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:vc="clr-namespace:TLKAPP.ViewConverter"
+    xmlns:views="clr-namespace:TLKAPP.Views"
+    xmlns:tlkcmd="clr-namespace:TLKVIEWMODLES.Commands;assembly=TLKVIEWMODLES"
+    Title="TLK Text Editor" Height="600" Width="400"
+    Loaded="{tlkcmd:BaseLoadedCommand ParameterConverter={vc:SettingConverter}}"
+    Closed="{tlkcmd:BaseClosedCommand ParameterConverter={vc:SettingConverter}}">
+
+    <DockPanel>
+        <views:MenuControl DockPanel.Dock="Top"/>
+
+        <views:WorkControl/>
+    </DockPanel>
+</Window>

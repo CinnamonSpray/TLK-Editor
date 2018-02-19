@@ -1,0 +1,38 @@
+﻿<UserControl x:Class="TLKAPP.Views.MenuControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:app="clr-namespace:TLKAPP"
+             xmlns:vc="clr-namespace:TLKAPP.ViewConverter"
+             xmlns:tlkcmd="clr-namespace:TLKVIEWMODLES.Commands;assembly=TLKVIEWMODLES"
+             app:OpenFileDlg.Show="{Binding OpenFileDlg}"
+             app:FontDlg.Show="{Binding FontDlg}"
+             app:MsgBox.Show="{Binding MsgBox}">
+    <Grid>
+        <Menu>
+            <MenuItem Header="파일">
+                <MenuItem Header="열기" Command="{tlkcmd:LoadFileCommand}" 
+                          CommandParameter="{Binding RelativeSource={RelativeSource Self}, Path=DataContext}"/>
+                <MenuItem Header="닫기" Command="{tlkcmd:UnloadFileCommand}"
+                          CommandParameter="{Binding RelativeSource={RelativeSource Self}, Path=DataContext}"/>
+                <Separator/>
+                <MenuItem Header="종료" Command="{tlkcmd:WinCloseCommand}" 
+                          CommandParameter="{Binding Converter={vc:WinCloseArgs}}"/>
+            </MenuItem>
+            <MenuItem Header="도구">
+                <MenuItem Header="Encoding">
+                    <StackPanel>
+                        <RadioButton GroupName="Encoding" Content="euc-kr" Command="{tlkcmd:EncodingCommand}"
+                                     CommandParameter="{Binding RelativeSource={RelativeSource Self}, Path=DataContext}"
+                                     IsChecked="{Binding Settings.TextEncoding, Mode=TwoWay, Converter={vc:TextEncodingConverter}, ConverterParameter=euc-kr}"/>
+                        <RadioButton GroupName="Encoding" Content="utf-8" Command="{tlkcmd:EncodingCommand}"
+                                     CommandParameter="{Binding RelativeSource={RelativeSource Self}, Path=DataContext}"
+                                     IsChecked="{Binding Settings.TextEncoding, Mode=TwoWay, Converter={vc:TextEncodingConverter}, ConverterParameter=utf-8}"/>
+                    </StackPanel>
+                </MenuItem>
+                <Separator/>
+                <MenuItem Header="글꼴" Command="{tlkcmd:FontDlgCommand}"
+                          CommandParameter="{Binding RelativeSource={RelativeSource Self}, Path=DataContext}"/>
+            </MenuItem>
+        </Menu>
+    </Grid>
+</UserControl>
