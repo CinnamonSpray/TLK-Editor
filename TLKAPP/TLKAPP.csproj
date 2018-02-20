@@ -36,6 +36,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Costura, Version=1.6.2.0, Culture=neutral, PublicKeyToken=9919ef960d84173d, processorArchitecture=MSIL">
@@ -44,6 +45,9 @@
     </Reference>
     <Reference Include="CustomControls">
       <HintPath>..\..\CustomControls\bin\Release\CustomControls.dll</HintPath>
+    </Reference>
+    <Reference Include="PatternHelper">
+      <HintPath>..\..\PatternHelper\bin\Release\PatternHelper.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ValueTuple, Version=4.0.2.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
@@ -132,10 +136,6 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\PatternHelper\PatternHelper.csproj">
-      <Project>{4b931cfa-ff74-42d6-af05-805473f97fdb}</Project>
-      <Name>PatternHelper</Name>
-    </ProjectReference>
     <ProjectReference Include="..\TLKVIEWMODLES\TLKVIEWMODLES.csproj">
       <Project>{57066411-b829-4179-86f5-9dfe758378e6}</Project>
       <Name>TLKVIEWMODLES</Name>
@@ -154,4 +154,9 @@
     <Error Condition="!Exists('..\packages\Costura.Fody.1.6.2\build\dotnet\Costura.Fody.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Costura.Fody.1.6.2\build\dotnet\Costura.Fody.targets'))" />
   </Target>
   <Import Project="..\packages\Costura.Fody.1.6.2\build\dotnet\Costura.Fody.targets" Condition="Exists('..\packages\Costura.Fody.1.6.2\build\dotnet\Costura.Fody.targets')" />
+  <PropertyGroup>
+    <PostBuildEvent>xcopy "$(TargetDir)CustomControls.dll" "..\\..\\..\\lib_exe\" /Y
+xcopy "$(TargetDir)PatternHelper.dll" "..\\..\\..\\lib_exe\" /Y
+xcopy "$(TargetDir)TLKAPP.exe" "..\\..\\..\\lib_exe\" /Y</PostBuildEvent>
+  </PropertyGroup>
 </Project>

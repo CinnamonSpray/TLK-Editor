@@ -9,10 +9,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TLKMODELS", "TLKMODELS\TLKM
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TLKVIEWMODLES", "TLKVIEWMODLES\TLKVIEWMODLES.csproj", "{57066411-B829-4179-86F5-9DFE758378E6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PatternHelper", "PatternHelper\PatternHelper.csproj", "{4B931CFA-FF74-42D6-AF05-805473F97FDB}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CustomControls", "..\CustomControls\CustomControls.csproj", "{61670725-B545-45B7-BBE0-CEF7969EC399}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -31,14 +27,6 @@ Global
 		{57066411-B829-4179-86F5-9DFE758378E6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{57066411-B829-4179-86F5-9DFE758378E6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{57066411-B829-4179-86F5-9DFE758378E6}.Release|Any CPU.Build.0 = Release|Any CPU
-		{4B931CFA-FF74-42D6-AF05-805473F97FDB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{4B931CFA-FF74-42D6-AF05-805473F97FDB}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{4B931CFA-FF74-42D6-AF05-805473F97FDB}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{4B931CFA-FF74-42D6-AF05-805473F97FDB}.Release|Any CPU.Build.0 = Release|Any CPU
-		{61670725-B545-45B7-BBE0-CEF7969EC399}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{61670725-B545-45B7-BBE0-CEF7969EC399}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{61670725-B545-45B7-BBE0-CEF7969EC399}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{61670725-B545-45B7-BBE0-CEF7969EC399}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
