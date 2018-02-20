@@ -11,7 +11,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TLKVIEWMODLES", "TLKVIEWMOD
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PatternHelper", "PatternHelper\PatternHelper.csproj", "{4B931CFA-FF74-42D6-AF05-805473F97FDB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CustomControls", "CustomControls\CustomControls.csproj", "{61670725-B545-45B7-BBE0-CEF7969EC399}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CustomControls", "..\CustomControls\CustomControls.csproj", "{61670725-B545-45B7-BBE0-CEF7969EC399}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

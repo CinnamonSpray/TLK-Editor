@@ -42,7 +42,7 @@ namespace TLKMODELS.IO
             {
                 _PreLoad = preload;
 
-                if (_PreLoad) LoadedStringTable();
+                if (_PreLoad) PreLoadedStringTable();
 
             }
         }
@@ -111,7 +111,7 @@ namespace TLKMODELS.IO
             fileLength = fs.Length;
         }
 
-        private void LoadedStringTable()
+        private void PreLoadedStringTable()
         {
             StrPosTable = new (int, int)[fileDataCnt];
 
@@ -126,70 +126,18 @@ namespace TLKMODELS.IO
             }
         }
 
-        private TLKENTRY GetEntry(int index)
+        private byte[] GetEntry(int index)
         {
             fs.Seek(EntriseOffset(index), SeekOrigin.Begin);
 
-            return new TLKENTRY()
-            {
-                Type = br.ReadInt16(),
-                ResourceName = br.ReadUInt64(),
-                Volume = br.ReadInt32(),
-                Pitch = br.ReadInt32(),
-                Offset = br.ReadInt32(),
-                Length = br.ReadInt32()
-            };
+            return br.ReadBytes((int)ESIZE.entriseSize);
         }
 
-        private void SetEntry(int index, TLKENTRY entry)
+        private void SetEntry(int index, byte[] buff)
         {
-            byte[] buff = EntryToByteArray(
-                BitConverter.GetBytes(entry.Type),
-                BitConverter.GetBytes(entry.ResourceName),
-                BitConverter.GetBytes(entry.Volume),
-                BitConverter.GetBytes(entry.Pitch),
-                BitConverter.GetBytes(entry.Offset),
-                BitConverter.GetBytes(entry.Length));
-
             fs.Seek(EntriseOffset(index), SeekOrigin.Begin);
 
             bw.Write(buff);
-        }
-
-        /*
-        public byte[] EntryToByteArray(byte[] a, byte[] b, byte[] c, byte[] d, byte[] e, byte[] f)
-        {
-            byte[] ret = new byte[(int)ESIZE.entriseSize];
-
-            int index = 0;
-
-            Buffer.BlockCopy(a, 0, ret, index, a.Length); index += a.Length;
-            Buffer.BlockCopy(b, 0, ret, index, b.Length); index += b.Length;
-            Buffer.BlockCopy(c, 0, ret, index, c.Length); index += c.Length;
-            Buffer.BlockCopy(d, 0, ret, index, d.Length); index += d.Length;
-            Buffer.BlockCopy(e, 0, ret, index, e.Length); index += e.Length;
-            Buffer.BlockCopy(f, 0, ret, index, f.Length); index += f.Length;
-
-            return ret;
-        }
-        */
-        public byte[] EntryToByteArray(params object[] values)
-        {
-            byte[] result = new byte[(int)ESIZE.entriseSize];
-
-            int count = values.Length;
-            int index = 0;
-
-            byte[] temp = null;
-            for (int i = 0; i < count; i++)
-            {
-                temp = (byte[])values[i];
-
-                Buffer.BlockCopy(temp, 0, result, index, temp.Length);
-                index += temp.Length;
-            }
-
-            return result;
         }
 
         private bool IsChecked()
@@ -276,8 +224,6 @@ namespace TLKMODELS.IO
 
             fs.Seek(fileDataOff + oldIndex, SeekOrigin.Begin);
             bw.Write(text);
-
-            Buff = null;
         }
 
         private void ModifyEntries(int entriseNumber, int textLength)

@@ -1,14 +1,15 @@
-﻿using System.Linq;
+﻿using System.Collections.ObjectModel;
+using System.Collections.Specialized;
+using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 
-using TLKMODELS;
 using TLKMODELS.IO;
 
 namespace TLKVIEWMODLES.Contexts.Models
 {
     [ComVisible(false)]
-    public class TLKTextCollection : ViewableCollection<TLKTEXT>
+    public class TLKTextCollection : ObservableCollection<TLKTEXT>
     {
         public string FilePath { get; set; } = string.Empty;
         public Encoding TextEncoding { get; set; } = Encoding.UTF8;
@@ -55,6 +56,81 @@ namespace TLKVIEWMODLES.Contexts.Models
             return Search(direction ? -1 : Count, searchText, direction);
         }
 
+        public void SetTLKText(int index, string replaceText)
+        {
+            if (string.IsNullOrEmpty(FilePath)) return;
+
+            using (var fs = new TLKFILE(FilePath))
+            {
+                fs.Encoder = TextEncoding;
+
+                fs.SetText(index, replaceText);
+
+                this[index].Text = replaceText;
+            }
+        }
+
+        public void ReplaceAll(string oldstr, string newstr, out int total)
+        {
+            if (string.IsNullOrEmpty(FilePath)) { total = 0; return; }
+
+            var temps = this.Where(o =>
+            {
+                return o.Text.IndexOf(oldstr) >= 0;
+            });
+
+            int cnt = 0;
+
+            using (var fs = new TLKFILE(FilePath))
+            {
+                fs.Encoder = TextEncoding;
+
+                string tString = string.Empty;
+                foreach (var temp in temps)
+                {
+                    tString = temp.Text.Replace(oldstr, newstr);
+
+                    fs.SetText(temp.Index, tString);
+
+                    this[temp.Index].Text = tString;
+                    cnt++;
+                }
+            }
+
+            total = cnt;
+        }
+
+        public void AddTLKText()
+        {
+
+        }
+
+        public void InsertTLKText()
+        {
+
+        }
+
+        public void RemoveTLKText()
+        {
+
+        }
+
+        public void RemoveAtTLKText()
+        {
+
+        }
+
+        private void AddRange(TLKTEXT[] collection)
+        {
+            if (collection == null) return;
+            // throw new ArgumentNullException("ViewableCollection AddRange Method Argument is Null.");
+
+            foreach (var item in collection) Items.Add(item);
+
+            // 아래 구문 없을 시 Collection Count 함수 Error 발생 확인...
+            OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
+        }
+
         private TLKTEXT Search(int Index, string text, bool direction)
         {
             TLKTEXT Item = null;
@@ -75,53 +151,6 @@ namespace TLKVIEWMODLES.Contexts.Models
             }
 
             return Item;
-        }
-
-        public void ReplaceAll(string oldstr, string newstr, out int total)
-        {
-            if (string.IsNullOrEmpty(FilePath)) { total = 0; return; }
-
-            var temps = this.Where(o =>
-            {
-                return o.Text.IndexOf(oldstr) >= 0;
-            });
-
-            int cnt = 0;
-            string tString = string.Empty;
-            foreach (var temp in temps)
-            {
-                tString = temp.Text.Replace(oldstr, newstr);
-
-                if (FileToSetText(temp.Index, tString))
-                {
-                    this[temp.Index].Text = tString;
-                    cnt++;
-                }
-            }
-
-            total = cnt;
-
-            temps = null;
-        }
-
-        public void SetTLKText(int index, string replaceText)
-        {
-            if (FileToSetText(index, replaceText))
-                this[index].Text = replaceText;
-        }
-
-        private bool FileToSetText(int index, string text)
-        {
-            if (string.IsNullOrEmpty(FilePath)) return false;
-
-            using (var fs = new TLKFILE(FilePath))
-            {
-                fs.Encoder = TextEncoding;
-
-                fs.SetText(index, text);
-            }
-
-            return true;
         }
     }
 }

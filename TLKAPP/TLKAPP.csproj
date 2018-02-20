@@ -42,6 +42,9 @@
       <HintPath>..\packages\Costura.Fody.1.6.2\lib\dotnet\Costura.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="CustomControls">
+      <HintPath>..\..\CustomControls\bin\Release\CustomControls.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ValueTuple, Version=4.0.2.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\packages\System.ValueTuple.4.4.0\lib\netstandard1.0\System.ValueTuple.dll</HintPath>
@@ -129,10 +132,6 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\CustomControls\CustomControls.csproj">
-      <Project>{61670725-b545-45b7-bbe0-cef7969ec399}</Project>
-      <Name>CustomControls</Name>
-    </ProjectReference>
     <ProjectReference Include="..\PatternHelper\PatternHelper.csproj">
       <Project>{4b931cfa-ff74-42d6-af05-805473f97fdb}</Project>
       <Name>PatternHelper</Name>

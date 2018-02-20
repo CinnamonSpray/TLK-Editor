@@ -62,8 +62,10 @@
     <Compile Include="Commands\ViewCommands.cs" />
     <Compile Include="Contexts\BaseContext.cs" />
     <Compile Include="Commands\MenuCommands.cs" />
+    <Compile Include="Contexts\Models\TLKENTRY.cs" />
+    <Compile Include="Contexts\Models\TLKTEXT.cs" />
     <Compile Include="Contexts\SettingsContext.cs" />
-    <Compile Include="Contexts\Models\TLKCollectionModel.cs" />
+    <Compile Include="Contexts\Models\TLKTextCollection.cs" />
     <Compile Include="Contexts\ViewContext.cs" />
     <Compile Include="Contexts\Models\ViewTabModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
