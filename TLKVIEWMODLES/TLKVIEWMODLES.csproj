@@ -40,16 +40,16 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\PatternHelper\PatternHelper.csproj">
+      <Project>{4b931cfa-ff74-42d6-af05-805473f97fdb}</Project>
+      <Name>PatternHelper</Name>
+    </ProjectReference>
     <ProjectReference Include="..\TLKMODELS\TLKMODELS.csproj">
       <Project>{5fa43569-a7f1-43df-b2d0-a3d9429be0ff}</Project>
       <Name>TLKMODELS</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="PatternHelper, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\PatternHelper\bin\Release\PatternHelper.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ValueTuple, Version=4.0.2.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\packages\System.ValueTuple.4.4.0\lib\netstandard1.0\System.ValueTuple.dll</HintPath>

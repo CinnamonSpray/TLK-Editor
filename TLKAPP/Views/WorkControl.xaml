@@ -45,8 +45,7 @@
             </Grid>
 
             <WrapPanel Grid.Column="1" HorizontalAlignment="Right" >
-                <Button Padding="8,0,8,0" FontSize="16" Content="Apply" Command="{tlkcmd:SetTLKTextCommand}" 
-                        CommandParameter="{Binding RelativeSource={RelativeSource Self}, Path=DataContext}"/>
+                <Button Padding="8,0,8,0" FontSize="16" Content="Apply" Command="{tlkcmd:SetTLKTextCommand}"/>
             </WrapPanel>
         </Grid>
 

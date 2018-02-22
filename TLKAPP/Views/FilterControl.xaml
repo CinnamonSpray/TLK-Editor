@@ -51,9 +51,9 @@
                 </Grid.ColumnDefinitions>
 
                 <Button Grid.Column="0" FontSize="16" Content="R" Margin="0,0,4,0"
-                        Command="{tlkcmd:ReplaceTLKTextCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Self}, Path=DataContext}"/>
+                        Command="{tlkcmd:ReplaceTLKTextCommand}"/>
                 <Button Grid.Column="1" FontSize="16" Content="A" Margin="0,0,4,0"
-                        Command="{tlkcmd:ReplaceAllTLKTextCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Self}, Path=DataContext}"/>
+                        Command="{tlkcmd:ReplaceAllTLKTextCommand}"/>
             </Grid>
 
             <TextBox Grid.Column="1" Text="{Binding View.ReplaceText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
