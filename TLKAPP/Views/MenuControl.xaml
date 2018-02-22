@@ -10,10 +10,8 @@
     <Grid>
         <Menu>
             <MenuItem Header="파일">
-                <MenuItem Header="열기" Command="{tlkcmd:LoadFileCommand}" 
-                          CommandParameter="{Binding RelativeSource={RelativeSource Self}, Path=DataContext}"/>
-                <MenuItem Header="닫기" Command="{tlkcmd:UnloadFileCommand}"
-                          CommandParameter="{Binding RelativeSource={RelativeSource Self}, Path=DataContext}"/>
+                <MenuItem Header="열기" Command="{tlkcmd:LoadFileCommand}"/>
+                <MenuItem Header="닫기" Command="{tlkcmd:UnloadFileCommand}"/>
                 <Separator/>
                 <MenuItem Header="종료" Command="{tlkcmd:WinCloseCommand}" 
                           CommandParameter="{Binding Converter={vc:WinCloseArgs}}"/>
@@ -22,16 +20,13 @@
                 <MenuItem Header="Encoding">
                     <StackPanel>
                         <RadioButton GroupName="Encoding" Content="euc-kr" Command="{tlkcmd:EncodingCommand}"
-                                     CommandParameter="{Binding RelativeSource={RelativeSource Self}, Path=DataContext}"
                                      IsChecked="{Binding Settings.TextEncoding, Mode=TwoWay, Converter={vc:TextEncodingConverter}, ConverterParameter=euc-kr}"/>
                         <RadioButton GroupName="Encoding" Content="utf-8" Command="{tlkcmd:EncodingCommand}"
-                                     CommandParameter="{Binding RelativeSource={RelativeSource Self}, Path=DataContext}"
                                      IsChecked="{Binding Settings.TextEncoding, Mode=TwoWay, Converter={vc:TextEncodingConverter}, ConverterParameter=utf-8}"/>
                     </StackPanel>
                 </MenuItem>
                 <Separator/>
-                <MenuItem Header="글꼴" Command="{tlkcmd:FontDlgCommand}"
-                          CommandParameter="{Binding RelativeSource={RelativeSource Self}, Path=DataContext}"/>
+                <MenuItem Header="글꼴" Command="{tlkcmd:FontDlgCommand}"/>
             </MenuItem>
         </Menu>
     </Grid>

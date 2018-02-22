@@ -1,7 +1,6 @@
 ﻿using System.Linq;
 
 using PatternHelper.MVVM;
-using TLKMODELS;
 using TLKVIEWMODLES.Contexts;
 using TLKVIEWMODLES.Contexts.Models;
 using TLKVIEWMODLES.Type;
@@ -126,17 +125,17 @@ namespace TLKVIEWMODLES.Commands
 
             if (item == null) return;
 
-            wtab.TLKTexts.SetTLKText(item.Index, context.View.ReplaceText);
+            wtab.TLKTexts.SetTLKText(item.Index, item.Text.Replace(context.View.FilterText, context.View.ReplaceText));
 
             wtab.Refresh();
 
             if (wtab.View.FilterCount != 0) return;
 
-            context.View.MsgBoxText = string.Format("지정된 텍스트를 모두 변경했습니다. {0}", context.View.FilterText);
-            context.MsgBox = true;
-
             context.View.FilterText = context.View.ReplaceText;
             context.View.ReplaceText = string.Empty;
+
+            context.View.MsgBoxText = string.Format("지정된 텍스트를 모두 변경했습니다. {0}", context.View.FilterText);
+            context.MsgBox = true;
         }
     }
 
@@ -157,9 +156,8 @@ namespace TLKVIEWMODLES.Commands
 
             wtab.TLKTexts.ReplaceAll(context.View.FilterText, context.View.ReplaceText, out int total);
 
-            //wtab.Refresh();
-
-            context.View.FilterText = context.View.ReplaceText; // FilterText 변경 시 Refresh 호출..
+            // FilterText 변경 시 Refresh 호출..
+            context.View.FilterText = context.View.ReplaceText; 
             context.View.ReplaceText = string.Empty;
 
             context.View.MsgBoxText = string.Format("총 {0}개 항목을 수정하였습니다.", total);

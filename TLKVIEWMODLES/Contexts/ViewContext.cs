@@ -107,7 +107,7 @@ namespace TLKVIEWMODLES.Contexts
         private void WorkTabRefresh()
         {
             if (WorkTabSelectedIndex > -1 && WorkTabSelectedIndex < WorkTabs.Count)
-                WorkTabs[WorkTabSelectedIndex]?.Refresh();
+                WorkTabs[WorkTabSelectedIndex].Refresh();
         }
 
         private void CheckFilterIgnoreFlag()

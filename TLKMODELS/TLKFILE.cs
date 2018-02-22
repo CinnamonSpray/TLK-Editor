@@ -207,23 +207,23 @@ namespace TLKMODELS.IO
             strLength = br.ReadInt32();
         }
 
-        private void ReplaceBytes(int oldIndex, int oldLength, byte[] text, int textlength)
+        private void ReplaceBytes(int oldIndex, int oldLength, byte[] newbuf, int newLength)
         {
             var Buff = new byte[(int)(fileLength - (fileDataOff + oldIndex + oldLength))];
             int BuffLeng = Buff.Length;
             int readIndex = (int)fileDataOff + oldIndex + oldLength;
-            int writeIndex = (int)fileDataOff + oldIndex + textlength;
+            int writeIndex = (int)fileDataOff + oldIndex + newLength;
 
             fs.Seek(readIndex, SeekOrigin.Begin);
             br.Read(Buff, 0, BuffLeng);
 
-            fs.SetLength(fileLength + (textlength - oldLength));
+            fs.SetLength(fileLength + (newLength - oldLength));
 
             fs.Seek(writeIndex, SeekOrigin.Begin);
             bw.Write(Buff, 0, BuffLeng);
 
             fs.Seek(fileDataOff + oldIndex, SeekOrigin.Begin);
-            bw.Write(text);
+            bw.Write(newbuf);
         }
 
         private void ModifyEntries(int entriseNumber, int textLength)

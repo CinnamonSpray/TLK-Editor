@@ -3,7 +3,6 @@ using System.Collections.ObjectModel;
 using System.Text;
 
 using PatternHelper.MVVM;
-using TLKMODELS;
 using TLKVIEWMODLES.Type;
 
 namespace TLKVIEWMODLES.Contexts.Models

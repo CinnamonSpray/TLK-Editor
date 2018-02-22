@@ -100,26 +100,6 @@ namespace TLKVIEWMODLES.Contexts.Models
             total = cnt;
         }
 
-        public void AddTLKText()
-        {
-
-        }
-
-        public void InsertTLKText()
-        {
-
-        }
-
-        public void RemoveTLKText()
-        {
-
-        }
-
-        public void RemoveAtTLKText()
-        {
-
-        }
-
         private void AddRange(TLKTEXT[] collection)
         {
             if (collection == null) return;
