@@ -19,8 +19,7 @@
         <DataTemplate x:Key="CustomTabHeader">
             <WrapPanel Margin="0,2,0,0">
                 <TextBlock Text="{Binding TabHeader}" Margin="0,0,4,0" MinWidth="24"/>
-                <Button Content="X" FontWeight="Bold" Padding="4,0,4,0" Command="{tlkcmd:TabCloseCommand}"
-                        CommandParameter="{Binding RelativeSource={RelativeSource Self}, Path=DataContext}"/>
+                <Button Content="X" FontWeight="Bold" Padding="4,0,4,0" Command="{tlkcmd:TabCloseCommand}"/>
             </WrapPanel>
         </DataTemplate>
 
