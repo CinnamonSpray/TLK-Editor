@@ -15,7 +15,7 @@ namespace TLKVIEWMODLES.Contexts
 
                 ClearFilterControl();
 
-                CheckFilterIgnoreFlag();
+                CheckFilterOrdinal();
             }
         }
 
@@ -31,13 +31,13 @@ namespace TLKVIEWMODLES.Contexts
             }
         }
 
-        private bool _FilterIgnore = false;
-        public bool FilterIgnore
+        private bool _FilterOrdinal = false;
+        public bool FilterOrdinal
         {
-            get { return _FilterIgnore; }
+            get { return _FilterOrdinal; }
             set
             {
-                SetField(ref _FilterIgnore, value, nameof(FilterIgnore));
+                SetField(ref _FilterOrdinal, value, nameof(FilterOrdinal));
 
                 WorkTabRefresh();
             }
@@ -61,7 +61,7 @@ namespace TLKVIEWMODLES.Contexts
             {
                 SetField(ref _ReplacePanel, value, nameof(ReplacePanel));
 
-                CheckFilterIgnoreFlag();
+                CheckFilterOrdinal();
             }
         }
 
@@ -110,9 +110,9 @@ namespace TLKVIEWMODLES.Contexts
                 WorkTabs[WorkTabSelectedIndex].Refresh();
         }
 
-        private void CheckFilterIgnoreFlag()
+        private void CheckFilterOrdinal()
         {
-            FilterIgnore = (FilterType.Text == FilterType) && ReplacePanel;
+            FilterOrdinal = (FilterType.Text == FilterType) && ReplacePanel;
         }
 
         public string MsgBoxText { get; set; }

@@ -86,7 +86,7 @@ namespace TLKVIEWMODLES.Contexts.Models
         {
             var tlkitem = item as TLKTEXT;
 
-            var role = View.FilterIgnore ?  StringComparison.Ordinal : StringComparison.OrdinalIgnoreCase;
+            var role = View.FilterOrdinal ?  StringComparison.Ordinal : StringComparison.OrdinalIgnoreCase;
 
             if (tlkitem != null && FilterType.Text == View.FilterType)
                 return tlkitem.Text.IndexOf(View.FilterText, role) >= 0;

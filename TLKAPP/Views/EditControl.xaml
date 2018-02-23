@@ -18,7 +18,7 @@
                     <cc:HighlightTextBlock
                         Text="{Binding Text}" TextWrapping="Wrap" HighlightBrush="Orange"
                         HighlightPhrase="{Binding ElementName=FilterListBox, Path=DataContext.View.FilterText}"
-                        IsCaseSensitive="{Binding ElementName=FilterListBox, Path=DataContext.View.FilterIgnore}">
+                        IsCaseSensitive="{Binding ElementName=FilterListBox, Path=DataContext.View.FilterOrdinal}">
                     </cc:HighlightTextBlock>
                 </DataTemplate>
             </cc:FilterListBox.ItemTemplate>
