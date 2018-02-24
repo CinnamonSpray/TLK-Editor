@@ -6,7 +6,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 
-using PatternHelper.MVVM;
+using PatternHelper.MVVM.WPF;
 using TLKAPP.Properties;
 using TLKVIEWMODLES.Type;
 

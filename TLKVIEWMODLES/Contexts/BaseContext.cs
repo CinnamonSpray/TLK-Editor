@@ -1,4 +1,4 @@
-﻿using PatternHelper.MVVM;
+﻿using PatternHelper.MVVM.WPF;
 
 namespace TLKVIEWMODLES.Contexts
 {

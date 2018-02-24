@@ -1,5 +1,5 @@
 ﻿
-using PatternHelper.MVVM;
+using PatternHelper.MVVM.WPF;
 using TLKVIEWMODLES.Contexts;
 using TLKVIEWMODLES.Type;
 

@@ -3,7 +3,7 @@ using System.Windows;
 using System.Windows.Media;
 using Microsoft.Win32;
 
-using PatternHelper.MVVM;
+using PatternHelper.MVVM.WPF;
 using TLKVIEWMODLES.Contexts;
 
 namespace TLKAPP

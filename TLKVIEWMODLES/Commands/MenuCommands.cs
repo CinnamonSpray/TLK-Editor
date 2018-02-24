@@ -1,6 +1,6 @@
 ﻿using System;
 
-using PatternHelper.MVVM;
+using PatternHelper.MVVM.WPF;
 using TLKVIEWMODLES.Contexts;
 
 namespace TLKVIEWMODLES.Commands

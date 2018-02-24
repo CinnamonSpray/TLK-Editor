@@ -2,7 +2,7 @@
 using System.Collections.ObjectModel;
 using System.Text;
 
-using PatternHelper.MVVM;
+using PatternHelper.MVVM.WPF;
 using TLKVIEWMODLES.Type;
 
 namespace TLKVIEWMODLES.Contexts.Models

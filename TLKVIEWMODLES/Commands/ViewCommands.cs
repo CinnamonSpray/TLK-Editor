@@ -1,6 +1,6 @@
 ﻿using System.Linq;
 
-using PatternHelper.MVVM;
+using PatternHelper.MVVM.WPF;
 using TLKVIEWMODLES.Contexts;
 using TLKVIEWMODLES.Contexts.Models;
 using TLKVIEWMODLES.Type;
