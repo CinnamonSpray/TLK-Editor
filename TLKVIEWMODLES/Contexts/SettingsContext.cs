@@ -36,8 +36,6 @@ namespace TLKVIEWMODLES.Contexts
             }
         }
 
-        private static readonly SettingsContext _instance = new SettingsContext();
-        public static SettingsContext Instance { get { return _instance; } }
-        private SettingsContext() { }
+        public SettingsContext() { }
     }
 }

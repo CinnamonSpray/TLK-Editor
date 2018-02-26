@@ -5,23 +5,33 @@ using System.Text;
 
 using PatternHelper.MVVM.WPF;
 using TLKMODELS;
+using TLKVIEWMODLES.Contexts;
 using TLKVIEWMODLES.Type;
 
 namespace TLKVIEWMODLES
 {
     public class WorkTabsModel : ObservableCollection<WorkTabItem>
     {
-        private static int SequenceNumber = 1;
+        private static int _SequenceNumber = 1;
+
+        private SettingsContext _Settings = null;
+        private ViewContext _View = null;
+
+        public WorkTabsModel(SettingsContext settings, ViewContext view)
+        {
+            _Settings = settings;
+            _View = view;
+        }
 
         public bool AddWorkTab(string filepath, string textencoding)
         {
             if (this.Any(tab => tab.TLKTexts.FilePath == filepath))
                 return false;
             
-            Add(new WorkTabItem()
+            Add(new WorkTabItem(_Settings, _View)
             {
                 Owner = this,
-                TabHeader = (SequenceNumber++).ToString() + " file",
+                TabHeader = (_SequenceNumber++).ToString() + " file",
             });
 
             var encoding = Encoding.GetEncoding(textencoding);
@@ -131,6 +141,8 @@ namespace TLKVIEWMODLES
 
         private EditTabsModel _editTabs = new EditTabsModel();
         public EditTabsModel EditTabs { get { return _editTabs; } }
+
+        public WorkTabItem(SettingsContext settings, ViewContext view) : base(settings, view) { }
     }
 
     public class EditTabsModel : ObservableCollection<EditTabItem>
@@ -149,6 +161,8 @@ namespace TLKVIEWMODLES
                 SetField(ref _TranslateText, value, nameof(TranslateText));
             }
         }
+
+        public EditTabItem(SettingsContext settings, ViewContext view) : base(settings, view) { }
     }
 
     public class TabItemModel<T> : ViewModelBase
@@ -170,7 +184,24 @@ namespace TLKVIEWMODLES
             }
         }
 
-        public Contexts.SettingsContext Settings { get { return Contexts.SettingsContext.Instance; } }
-        public Contexts.ViewContext View { get { return Contexts.ViewContext.Instance; } }
+        public TabItemModel(SettingsContext settings, ViewContext view)
+        {
+            Settings = settings;
+            View = view;
+        }
+
+        private SettingsContext _Settings;
+        public SettingsContext Settings
+        {
+            get { return _Settings; }
+            set { _Settings = value; }
+        }
+
+        private ViewContext _View;
+        public ViewContext View
+        {
+            get { return _View; }
+            set { _View = value; }
+        }
     }
 }

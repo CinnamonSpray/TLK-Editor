@@ -40,9 +40,13 @@ namespace TLKVIEWMODLES.Contexts
             }
         }
   
-        public SettingsContext Settings { get { return SettingsContext.Instance; } }
-        public ViewContext View { get { return ViewContext.Instance; } }
+        public SettingsContext Settings { get; private set; }
+        public ViewContext View { get; private set; }
 
-        public BaseContext() { }
+        public BaseContext()
+        {
+            Settings = new SettingsContext();
+            View = new ViewContext(Settings);
+        }
     }
 }

@@ -52,7 +52,7 @@ namespace TLKVIEWMODLES.Commands
 
             if (tab.Any(o => int.Parse(o.TabHeader) == item.Index)) return;
 
-            tab.Add(new EditTabItem()
+            tab.Add(new EditTabItem(context.Settings, context.View)
             {
                 Owner = tab,
                 TabHeader = item.Index.ToString(),
