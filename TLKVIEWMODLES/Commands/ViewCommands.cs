@@ -1,13 +1,13 @@
 ﻿using System.Linq;
 
 using PatternHelper.MVVM.WPF;
+using TLKMODELS;
 using TLKVIEWMODLES.Contexts;
-using TLKVIEWMODLES.Contexts.Models;
 using TLKVIEWMODLES.Type;
 
 namespace TLKVIEWMODLES.Commands
 {
-    public class TabCloseCommand : MarkupCommandExtension<TabCloseCommand, object>
+    public class TabCloseCommand : MarkupCommandExtension<object>
     {
         protected override void MarkupCommandExecute(object item)
         {
@@ -25,7 +25,7 @@ namespace TLKVIEWMODLES.Commands
         }
     }
 
-    public class InitTLKTextCommand : MarkupCommandExtension<InitTLKTextCommand, InitCollectionEvtArgs>
+    public class InitTLKTextCommand : MarkupCommandExtension<InitCollectionEvtArgs>
     {
         protected override void MarkupCommandExecute(InitCollectionEvtArgs args)
         {
@@ -39,7 +39,7 @@ namespace TLKVIEWMODLES.Commands
         }
     }
 
-    public class GetTLKTextCommand : MarkupCommandExtension<GetTLKTextCommand, (object context, object selectedItem)>
+    public class GetTLKTextCommand : MarkupCommandExtension<(object context, object selectedItem)>
     {
         protected override void MarkupCommandExecute((object context, object selectedItem) args)
         {
@@ -63,7 +63,7 @@ namespace TLKVIEWMODLES.Commands
         }
     }
 
-    public class SetTLKTextCommand : MarkupCommandExtension<SetTLKTextCommand, BaseContext>
+    public class SetTLKTextCommand : MarkupCommandExtension<BaseContext>
     {
         protected override void MarkupCommandExecute(BaseContext context)
         {
@@ -94,7 +94,7 @@ namespace TLKVIEWMODLES.Commands
         }
     }
 
-    public class FilterCountCommand : MarkupCommandExtension<FilterCountCommand, (object context, int cnt)>
+    public class FilterCountCommand : MarkupCommandExtension<(object context, int cnt)>
     {
         protected override void MarkupCommandExecute((object context, int cnt) args)
         {
@@ -106,7 +106,7 @@ namespace TLKVIEWMODLES.Commands
         }
     }
 
-    public class ReplaceTLKTextCommand : MarkupCommandExtension<ReplaceTLKTextCommand, BaseContext>
+    public class ReplaceTLKTextCommand : MarkupCommandExtension<BaseContext>
     {
         protected override void MarkupCommandExecute(BaseContext context)
         {
@@ -139,7 +139,7 @@ namespace TLKVIEWMODLES.Commands
         }
     }
 
-    public class ReplaceAllTLKTextCommand : MarkupCommandExtension<ReplaceAllTLKTextCommand, BaseContext>
+    public class ReplaceAllTLKTextCommand : MarkupCommandExtension<BaseContext>
     {
         protected override void MarkupCommandExecute(BaseContext context)
         {

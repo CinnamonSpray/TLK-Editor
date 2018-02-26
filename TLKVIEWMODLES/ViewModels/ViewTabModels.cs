@@ -1,26 +1,38 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Text;
 
 using PatternHelper.MVVM.WPF;
+using TLKMODELS;
 using TLKVIEWMODLES.Type;
 
-namespace TLKVIEWMODLES.Contexts.Models
+namespace TLKVIEWMODLES
 {
     public class WorkTabsModel : ObservableCollection<WorkTabItem>
     {
         private static int SequenceNumber = 1;
 
-        public void AddWorkTab(string filepath, string textencoding)
+        public bool AddWorkTab(string filepath, string textencoding)
         {
+            if (this.Any(tab => tab.TLKTexts.FilePath == filepath))
+                return false;
+            
             Add(new WorkTabItem()
             {
                 Owner = this,
                 TabHeader = (SequenceNumber++).ToString() + " file",
             });
 
-            this[Count - 1].TLKTexts.InitializeFromFile(
-                filepath, Encoding.GetEncoding(textencoding));
+            var encoding = Encoding.GetEncoding(textencoding);
+
+            if (!this[Count - 1].TLKTexts.InitializeFromFile(filepath, encoding))
+            {
+                RemoveWorkTab(Count - 1);
+                return false;
+            }
+            
+            return true;
         }
 
         public void RemoveWorkTab(int index)
@@ -158,7 +170,7 @@ namespace TLKVIEWMODLES.Contexts.Models
             }
         }
 
-        public SettingsContext Settings { get { return SettingsContext.Instance; } }
-        public ViewContext View { get { return ViewContext.Instance; } }
+        public Contexts.SettingsContext Settings { get { return Contexts.SettingsContext.Instance; } }
+        public Contexts.ViewContext View { get { return Contexts.ViewContext.Instance; } }
     }
 }

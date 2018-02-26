@@ -123,8 +123,8 @@ namespace TLKVIEWMODLES.Contexts
             ReplaceText = string.Empty;
         }
 
-        private Models.WorkTabsModel _workTabs = new Models.WorkTabsModel();
-        public Models.WorkTabsModel WorkTabs { get { return _workTabs; } }
+        private WorkTabsModel _workTabs = new WorkTabsModel();
+        public WorkTabsModel WorkTabs { get { return _workTabs; } }
 
         private static readonly ViewContext _instance = new ViewContext();
         public static ViewContext Instance { get { return _instance; } }

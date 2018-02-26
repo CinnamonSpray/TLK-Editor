@@ -5,19 +5,17 @@ using TLKVIEWMODLES.Contexts;
 
 namespace TLKVIEWMODLES.Commands
 {
-    public class LoadFileCommand : MarkupCommandExtension<LoadFileCommand, BaseContext>
+    public class LoadFileCommand : MarkupCommandExtension<BaseContext>
     {
         protected override void MarkupCommandExecute(BaseContext context)
         {
             if (context == null) return;
 
-            context.View.ClearFilterControl();
-
-            context.OpenFileDlg = true;
+            context.OpenDlg = true;
         }
     }
 
-    public class UnloadFileCommand : MarkupCommandExtension<UnloadFileCommand, BaseContext>
+    public class UnloadFileCommand : MarkupCommandExtension<BaseContext>
     {
         protected override void MarkupCommandExecute(BaseContext context)
         {
@@ -29,7 +27,7 @@ namespace TLKVIEWMODLES.Commands
         }
     }
 
-    public class WinCloseCommand : MarkupCommandExtension<WinCloseCommand, Action>
+    public class WinCloseCommand : MarkupCommandExtension<Action>
     {
         protected override void MarkupCommandExecute(Action WinClose)
         {
@@ -37,7 +35,7 @@ namespace TLKVIEWMODLES.Commands
         }
     }
 
-    public class EncodingCommand : MarkupCommandExtension<EncodingCommand, BaseContext>
+    public class EncodingCommand : MarkupCommandExtension<BaseContext>
     {
         protected override void MarkupCommandExecute(BaseContext context)
         {
@@ -50,7 +48,7 @@ namespace TLKVIEWMODLES.Commands
         }
     }
 
-    public class FontDlgCommand : MarkupCommandExtension<FontDlgCommand, BaseContext>
+    public class FontDlgCommand : MarkupCommandExtension<BaseContext>
     {
         protected override void MarkupCommandExecute(BaseContext context)
         {

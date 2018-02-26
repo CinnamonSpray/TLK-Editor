@@ -4,15 +4,15 @@ namespace TLKVIEWMODLES.Contexts
 {
     public class BaseContext : ViewModelBase
     {
-        private bool _OpenFileDlg;
-        public bool OpenFileDlg
+        private bool _OpenDlg;
+        public bool OpenDlg
         {
-            get { return _OpenFileDlg; }
+            get { return _OpenDlg; }
             set
             {
-                SetField(ref _OpenFileDlg, value, nameof(OpenFileDlg));
+                SetField(ref _OpenDlg, value, nameof(OpenDlg));
 
-                if (value) OpenFileDlg ^= value;
+                if (value) OpenDlg ^= value;
             }
         }
 
