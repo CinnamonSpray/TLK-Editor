@@ -1,11 +1,10 @@
-﻿
-using PatternHelper.MVVM;
+﻿using PatternHelper.MVVM.WPF;
 using TLKVIEWMODLES.Contexts;
 using TLKVIEWMODLES.Type;
 
 namespace TLKVIEWMODLES.Commands
 {
-    public class BaseLoadedCommand : MarkupCommandExtension<BaseLoadedCommand, ConfigEvtArgs>
+    public class BaseLoadedCommand : MarkupCommandExtension<ConfigEvtArgs>
     {
         protected override void MarkupCommandExecute(ConfigEvtArgs config)
         {
@@ -24,7 +23,7 @@ namespace TLKVIEWMODLES.Commands
         }
     }
 
-    public class BaseClosedCommand : MarkupCommandExtension<BaseClosedCommand, ConfigEvtArgs>
+    public class BaseClosedCommand : MarkupCommandExtension<ConfigEvtArgs>
     {
         protected override void MarkupCommandExecute(ConfigEvtArgs config)
         {

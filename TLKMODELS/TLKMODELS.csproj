@@ -41,7 +41,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TLKFILE.cs" />
+    <Compile Include="IO\TLKFILE.cs" />
+    <Compile Include="Models\TLKTextCollection.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />

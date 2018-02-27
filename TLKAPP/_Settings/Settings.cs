@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Windows;
 
 using TLKVIEWMODLES.Type;
@@ -32,7 +33,7 @@ namespace TLKAPP.Properties {
         }
     }
 
-    [System.Configuration.SettingsSerializeAs(System.Configuration.SettingsSerializeAs.Xml)]
+    [SettingsSerializeAs(SettingsSerializeAs.Xml)]
     public class FontXmlTemplate
     {
         public string FamilyName { get; set; }
@@ -55,7 +56,7 @@ namespace TLKAPP.Properties {
         }
     }
 
-    [System.Configuration.SettingsSerializeAs(System.Configuration.SettingsSerializeAs.Xml)]
+    [SettingsSerializeAs(SettingsSerializeAs.Xml)]
     public class ViewXmlTemplate
     {
         public Rect Rect { get; set; }
@@ -66,122 +67,49 @@ namespace TLKAPP.Properties {
         {
             Rect = rect;
         }
-    }
+    }  
 
-    public class ConfigArgs : ConfigEvtArgs
+    internal sealed class ViewConfig
     {
-        private FrameworkElement _fe;
-
-        public ConfigArgs(FrameworkElement fe)
+        public static void Load(Window win)
         {
-            _fe = fe;
-        }
+            var config = Settings.Default.ViewConfig;
 
-        public object DataContext
-        {
-            get { return _fe.DataContext; }
-            set { _fe.DataContext = value; }
-        }
-
-        private string _fontFamilyName;
-        public string FontFamilyName
-        {
-            get { return _fontFamilyName; }
-            set { _fontFamilyName = value; }
-        }
-
-        private double _fontSize;
-        public double FontSize
-        {
-            get { return _fontSize; }
-            set { _fontSize = value; }
-        }
-
-        private string _textEncoding;
-        public string TextEncoding
-        {
-            get { return _textEncoding; }
-            set { _textEncoding = value; }
-        }
-
-        public void SettingLoad()
-        {
-            if (_fe is Window)
+            if (config != null && win != null)
             {
-                ViewConfig.Load((Window)_fe);
+                var screen = new Rect(0.0, 0.0,
+                    SystemParameters.VirtualScreenWidth,
+                    SystemParameters.VirtualScreenHeight);
 
-                if (Settings.Default.FontConfig == null)
-                    Settings.Default.FontConfig = new FontXmlTemplate();
-
-                FontFamilyName = string.IsNullOrEmpty(Settings.Default.FontConfig.FamilyName) ?
-                    "Malgun Gothic" : Settings.Default.FontConfig.FamilyName;
-
-                FontSize = Settings.Default.FontConfig.Size == 0.0 ?
-                        12 : Settings.Default.FontConfig.Size;
-
-                TextEncoding = string.IsNullOrEmpty(Settings.Default.TextEncoding) ?
-                    "utf-8" : Settings.Default.TextEncoding;
-            }
-        }
-
-        public void SettingSave()
-        {
-            if (_fe is Window)
-            {
-                ViewConfig.Save((Window)_fe);
-
-                Settings.Default.FontConfig.FamilyName = FontFamilyName;
-
-                Settings.Default.FontConfig.Size = FontSize;
-
-                Settings.Default.TextEncoding = TextEncoding;
-
-                Settings.Default.Save();
-            }
-        }
-
-        private sealed class ViewConfig
-        {
-            public static void Load(Window win)
-            {
-                var config = Settings.Default.ViewConfig;
-
-                if (config != null && win != null)
+                if (screen.Contains(new Point(win.Top, win.Left)))
                 {
-                    var screen = new Rect(0.0, 0.0,
-                        SystemParameters.VirtualScreenWidth,
-                        SystemParameters.VirtualScreenHeight);
-
-                    if (screen.Contains(new Point(win.Top, win.Left)))
-                    {
-                        win.Top = config[0].Rect.X;
-                        win.Left = config[0].Rect.Y;
-                        win.Width = config[0].Rect.Width;
-                        win.Height = config[0].Rect.Height;
-                    }
-                    else
-                    {
-                        win.Top = (screen.Width / 2) + (win.Width / 2);
-                        win.Left = (screen.Height / 2) + (win.Height / 2);
-                        win.Width = 400;
-                        win.Height = 600;
-                    }
+                    win.Top = config[0].Rect.X;
+                    win.Left = config[0].Rect.Y;
+                    win.Width = config[0].Rect.Width;
+                    win.Height = config[0].Rect.Height;
                 }
                 else
                 {
-                    Settings.Default.ViewConfig = new List<ViewXmlTemplate>();
+                    win.Top = (screen.Width / 2) + (win.Width / 2);
+                    win.Left = (screen.Height / 2) + (win.Height / 2);
+                    win.Width = 400;
+                    win.Height = 600;
                 }
             }
-
-            public static void Save(Window win)
+            else
             {
-                var config = Settings.Default.ViewConfig;
-
-                config.Clear();
-
-                config.Add(new ViewXmlTemplate(
-                new Rect(win.Top, win.Left, win.Width, win.Height)));
+                Settings.Default.ViewConfig = new List<ViewXmlTemplate>();
             }
+        }
+
+        public static void Save(Window win)
+        {
+            var config = Settings.Default.ViewConfig;
+
+            config.Clear();
+
+            config.Add(new ViewXmlTemplate(
+            new Rect(win.Top, win.Left, win.Width, win.Height)));
         }
     }
 }

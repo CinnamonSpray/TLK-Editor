@@ -1,12 +1,15 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
 using System.Collections.Specialized;
+using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
+using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 
 using TLKMODELS.IO;
 
-namespace TLKVIEWMODLES.Contexts.Models
+namespace TLKMODELS
 {
     [ComVisible(false)]
     public class TLKTextCollection : ObservableCollection<TLKTEXT>
@@ -14,9 +17,11 @@ namespace TLKVIEWMODLES.Contexts.Models
         public string FilePath { get; set; } = string.Empty;
         public Encoding TextEncoding { get; set; } = Encoding.UTF8;
 
-        public void InitializeFromFile(string filepath, Encoding encoding)
+        public bool InitializeFromFile(string filepath, Encoding encoding)
         {
-            if (string.IsNullOrEmpty(filepath)) return;
+            bool result = false;
+
+            if (string.IsNullOrEmpty(filepath)) return result;
 
             FilePath = filepath;
             TextEncoding = encoding;
@@ -25,9 +30,7 @@ namespace TLKVIEWMODLES.Contexts.Models
             {
                 fs.Encoder = TextEncoding;
 
-                if (fs.fileLength <= 0)
-                    // View와 ViewModel간 error 처리 구조 구현...
-                    Add(new TLKTEXT(0, fs.ErrorMsg));
+                if (fs.fileLength <= 0) result = false;
 
                 else
                 {
@@ -42,9 +45,11 @@ namespace TLKVIEWMODLES.Contexts.Models
 
                     AddRange(temp);
 
-                    temp = null;
+                    result = true;
                 }
             }
+
+            return result;
         }
 
         public TLKTEXT GetTLKText(string searchText, bool direction)
@@ -131,6 +136,55 @@ namespace TLKVIEWMODLES.Contexts.Models
             }
 
             return Item;
+        }
+    }
+
+    public class TLKTEXT
+    {
+        public int Index { get; set; }
+        public string Text { get; set; }
+
+        public TLKTEXT(int index, string text)
+        {
+            Index = index;
+            Text = text;
+        }
+
+        public override string ToString()
+        {
+            return Index.ToString() + " " + Text;
+        }
+    }
+
+    [Serializable]
+    public class TLKENTRY
+    {
+        public short Type { get; set; }
+        public ulong ResourceName { get; set; }
+        public int Volume { get; set; }
+        public int Pitch { get; set; }
+        public int Offset { get; set; }
+        public int Length { get; set; }
+
+        public TLKENTRY() { }
+
+        public TLKENTRY(byte[] buff)
+        {
+            Type = BitConverter.ToInt16(buff, 0);
+            ResourceName = BitConverter.ToUInt64(buff, 2);
+            Volume = BitConverter.ToInt32(buff, 10);
+            Pitch = BitConverter.ToInt32(buff, 14);
+            Offset = BitConverter.ToInt32(buff, 18);
+            Length = BitConverter.ToInt32(buff, 22);
+        }
+
+        public byte[] ToByteArray()
+        {
+            var mstream = new MemoryStream();
+
+            new BinaryFormatter().Serialize(mstream, this);
+
+            return mstream.ToArray();
         }
     }
 }

@@ -5,13 +5,71 @@ using System.Globalization;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
+using System.Windows.Media;
+using Microsoft.Win32;
 
-using PatternHelper.MVVM;
+using PatternHelper.MVVM.WPF;
 using TLKAPP.Properties;
+using TLKVIEWMODLES.Contexts;
 using TLKVIEWMODLES.Type;
 
 namespace TLKAPP.ViewConverter
 {
+    public class OpenDlg : DialogBehavior<OpenDlg, BaseContext>
+    {
+        public override void OnDialog(BaseContext context)
+        {
+            if (context == null) return;
+
+            var dlg = new OpenFileDialog();
+
+            if (dlg.ShowDialog() != true) return;
+
+            if (string.IsNullOrEmpty(dlg.FileName)) return;
+
+            var tabs = context.View.WorkTabs;
+
+            if (tabs.AddWorkTab(dlg.FileName, context.Settings.TextEncoding))
+                context.View.WorkTabSelectedIndex = tabs.Count - 1;
+
+            else
+                MessageBox.Show("TLK 파일이 아니거나 해당 파일의 경로가 이미 존재합니다.", "알림", MessageBoxButton.OK);
+        }
+    }
+
+    public class FontDlg : DialogBehavior<FontDlg, BaseContext>
+    {
+        public override void OnDialog(BaseContext context)
+        {
+            if (context == null) return;
+
+            var dlg = new CustomControls.FontDialog()
+            {
+                Owner = Application.Current.MainWindow,
+                Font = new CustomControls.FontInfo(
+                    new FontFamily(context.Settings.FontFamilyName),
+                    context.Settings.FontSize),
+            };
+
+            if (dlg.ShowDialog() == true)
+            {
+                context.Settings.FontFamilyName = dlg.Font.Family.ToString();
+                context.Settings.FontSize = dlg.Font.Size;
+            }
+        }
+    }
+
+
+    public class MsgBox : DialogBehavior<MsgBox, BaseContext>
+    {
+        public override void OnDialog(BaseContext context)
+        {
+            if (context == null) return;
+
+            MessageBox.Show(context.View.MsgBoxText, "알림", MessageBoxButton.OK);
+        }
+    }
+
     public class WinCloseArgs : ValuesConverterExtension<WinCloseArgs>
     {
         public override object Convert(object value, Type targetType, object parameter, CultureInfo culture)
@@ -63,6 +121,79 @@ namespace TLKAPP.ViewConverter
             var fe = value as FrameworkElement;
 
             return fe == null ? null : new ConfigArgs(fe);
+        }
+
+        private class ConfigArgs : ConfigEvtArgs
+        {
+            private FrameworkElement _fe;
+
+            public ConfigArgs(FrameworkElement fe)
+            {
+                _fe = fe;
+            }
+
+            public object DataContext
+            {
+                get { return _fe.DataContext; }
+                set { _fe.DataContext = value; }
+            }
+
+            private string _fontFamilyName;
+            public string FontFamilyName
+            {
+                get { return _fontFamilyName; }
+                set { _fontFamilyName = value; }
+            }
+
+            private double _fontSize;
+            public double FontSize
+            {
+                get { return _fontSize; }
+                set { _fontSize = value; }
+            }
+
+            private string _textEncoding;
+            public string TextEncoding
+            {
+                get { return _textEncoding; }
+                set { _textEncoding = value; }
+            }
+
+            public void SettingLoad()
+            {
+                if (_fe is Window)
+                {
+                    ViewConfig.Load((Window)_fe);
+
+                    if (Settings.Default.FontConfig == null)
+                        Settings.Default.FontConfig = new FontXmlTemplate();
+
+                    FontFamilyName = string.IsNullOrEmpty(Settings.Default.FontConfig.FamilyName) ?
+                        "Malgun Gothic" : Settings.Default.FontConfig.FamilyName;
+
+                    FontSize = Settings.Default.FontConfig.Size == 0.0 ?
+                            12 : Settings.Default.FontConfig.Size;
+
+                    TextEncoding = string.IsNullOrEmpty(Settings.Default.TextEncoding) ?
+                        "utf-8" : Settings.Default.TextEncoding;
+                }
+            }
+
+            public void SettingSave()
+            {
+                if (_fe is Window)
+                {
+                    ViewConfig.Save((Window)_fe);
+
+                    Settings.Default.FontConfig.FamilyName = FontFamilyName;
+
+                    Settings.Default.FontConfig.Size = FontSize;
+
+                    Settings.Default.TextEncoding = TextEncoding;
+
+                    Settings.Default.Save();
+                }
+            }
         }
     }
 

@@ -7,12 +7,11 @@
     <UniformGrid Rows="2">
 
         <cc:FilterListBox Grid.Row="0" Name="FilterListBox" ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                          IsSynchronizedWithCurrentItem="True" cc:ListBoxExtenders.AutoScrollToCurrentItem="True"
                           SelectedIndex="{Binding TLKTextsSelectedIndex}" ViewSource="{Binding TLKTexts}"
                           FontSize="{Binding Settings.FontSize}" FontFamily="{Binding Settings.FontFamilyName}"
-                          MouseDoubleClick="{tlkcmd:GetTLKTextCommand ParameterConverter={vc:TLKTextSelectedItemConverter}}"
-                          RegisterView="{tlkcmd:InitTLKTextCommand ParameterConverter={vc:TLKTextViewConverter}}"
-                          ViewCount="{tlkcmd:FilterCountCommand ParameterConverter={vc:TLKTextsCountConverter}}">
+                          MouseDoubleClick="{tlkcmd:GetTLKTextCommand EvtArgsCvt={vc:TLKTextSelectedItemConverter}}"
+                          RegisterView="{tlkcmd:InitTLKTextCommand EvtArgsCvt={vc:TLKTextViewConverter}}"
+                          ViewCount="{tlkcmd:FilterCountCommand EvtArgsCvt={vc:TLKTextsCountConverter}}">
             <cc:FilterListBox.ItemTemplate>
                 <DataTemplate>
                     <cc:HighlightTextBlock

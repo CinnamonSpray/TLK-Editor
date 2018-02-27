@@ -1,26 +1,48 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Text;
 
-using PatternHelper.MVVM;
+using PatternHelper.MVVM.WPF;
+using TLKMODELS;
+using TLKVIEWMODLES.Contexts;
 using TLKVIEWMODLES.Type;
 
-namespace TLKVIEWMODLES.Contexts.Models
+namespace TLKVIEWMODLES
 {
     public class WorkTabsModel : ObservableCollection<WorkTabItem>
     {
-        private static int SequenceNumber = 1;
+        private static int _SequenceNumber = 1;
 
-        public void AddWorkTab(string filepath, string textencoding)
+        private SettingsContext _Settings = null;
+        private ViewContext _View = null;
+
+        public WorkTabsModel(SettingsContext settings, ViewContext view)
         {
-            Add(new WorkTabItem()
+            _Settings = settings;
+            _View = view;
+        }
+
+        public bool AddWorkTab(string filepath, string textencoding)
+        {
+            if (this.Any(tab => tab.TLKTexts.FilePath == filepath))
+                return false;
+            
+            Add(new WorkTabItem(_Settings, _View)
             {
                 Owner = this,
-                TabHeader = (SequenceNumber++).ToString() + " file",
+                TabHeader = (_SequenceNumber++).ToString() + " file",
             });
 
-            this[Count - 1].TLKTexts.InitializeFromFile(
-                filepath, Encoding.GetEncoding(textencoding));
+            var encoding = Encoding.GetEncoding(textencoding);
+
+            if (!this[Count - 1].TLKTexts.InitializeFromFile(filepath, encoding))
+            {
+                RemoveWorkTab(Count - 1);
+                return false;
+            }
+            
+            return true;
         }
 
         public void RemoveWorkTab(int index)
@@ -119,6 +141,8 @@ namespace TLKVIEWMODLES.Contexts.Models
 
         private EditTabsModel _editTabs = new EditTabsModel();
         public EditTabsModel EditTabs { get { return _editTabs; } }
+
+        public WorkTabItem(SettingsContext settings, ViewContext view) : base(settings, view) { }
     }
 
     public class EditTabsModel : ObservableCollection<EditTabItem>
@@ -137,6 +161,8 @@ namespace TLKVIEWMODLES.Contexts.Models
                 SetField(ref _TranslateText, value, nameof(TranslateText));
             }
         }
+
+        public EditTabItem(SettingsContext settings, ViewContext view) : base(settings, view) { }
     }
 
     public class TabItemModel<T> : ViewModelBase
@@ -158,7 +184,24 @@ namespace TLKVIEWMODLES.Contexts.Models
             }
         }
 
-        public SettingsContext Settings { get { return SettingsContext.Instance; } }
-        public ViewContext View { get { return ViewContext.Instance; } }
+        public TabItemModel(SettingsContext settings, ViewContext view)
+        {
+            Settings = settings;
+            View = view;
+        }
+
+        private SettingsContext _Settings;
+        public SettingsContext Settings
+        {
+            get { return _Settings; }
+            set { _Settings = value; }
+        }
+
+        private ViewContext _View;
+        public ViewContext View
+        {
+            get { return _View; }
+            set { _View = value; }
+        }
     }
 }

@@ -1,18 +1,18 @@
-﻿using PatternHelper.MVVM;
+﻿using PatternHelper.MVVM.WPF;
 
 namespace TLKVIEWMODLES.Contexts
 {
     public class BaseContext : ViewModelBase
     {
-        private bool _OpenFileDlg;
-        public bool OpenFileDlg
+        private bool _OpenDlg;
+        public bool OpenDlg
         {
-            get { return _OpenFileDlg; }
+            get { return _OpenDlg; }
             set
             {
-                SetField(ref _OpenFileDlg, value, nameof(OpenFileDlg));
+                SetField(ref _OpenDlg, value, nameof(OpenDlg));
 
-                if (value) OpenFileDlg ^= value;
+                if (value) OpenDlg ^= value;
             }
         }
 
@@ -40,9 +40,13 @@ namespace TLKVIEWMODLES.Contexts
             }
         }
   
-        public SettingsContext Settings { get { return SettingsContext.Instance; } }
-        public ViewContext View { get { return ViewContext.Instance; } }
+        public SettingsContext Settings { get; private set; }
+        public ViewContext View { get; private set; }
 
-        public BaseContext() { }
+        public BaseContext()
+        {
+            Settings = new SettingsContext();
+            View = new ViewContext(Settings);
+        }
     }
 }
