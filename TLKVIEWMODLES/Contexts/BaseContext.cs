@@ -27,18 +27,6 @@ namespace TLKVIEWMODLES.Contexts
                 if (value) FontDlg ^= value;
             }
         }
-
-        private bool _MsgBox;
-        public bool MsgBox
-        {
-            get { return _MsgBox; }
-            set
-            {
-                SetField(ref _MsgBox, value, nameof(MsgBox));
-
-                if (value) MsgBox ^= value;
-            }
-        }
   
         public SettingsContext Settings { get; private set; }
         public ViewContext View { get; private set; }

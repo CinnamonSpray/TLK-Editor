@@ -29,11 +29,9 @@ namespace TLKAPP.ViewConverter
 
             var tabs = context.View.WorkTabs;
 
-            if (tabs.AddWorkTab(dlg.FileName, context.Settings.TextEncoding))
-                context.View.WorkTabSelectedIndex = tabs.Count - 1;
+            tabs.AddWorkTab(dlg.FileName, context.Settings.TextEncoding);
 
-            else
-                MessageBox.Show("TLK 파일이 아니거나 해당 파일의 경로가 이미 존재합니다.", "알림", MessageBoxButton.OK);
+            context.View.WorkTabSelectedIndex = tabs.Count - 1;
         }
     }
 
@@ -56,17 +54,6 @@ namespace TLKAPP.ViewConverter
                 context.Settings.FontFamilyName = dlg.Font.Family.ToString();
                 context.Settings.FontSize = dlg.Font.Size;
             }
-        }
-    }
-
-
-    public class MsgBox : DialogBehavior<MsgBox, BaseContext>
-    {
-        public override void OnDialog(BaseContext context)
-        {
-            if (context == null) return;
-
-            MessageBox.Show(context.View.MsgBoxText, "알림", MessageBoxButton.OK);
         }
     }
 

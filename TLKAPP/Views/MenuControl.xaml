@@ -4,8 +4,7 @@
              xmlns:vc="clr-namespace:TLKAPP.ViewConverter"
              xmlns:tlkcmd="clr-namespace:TLKVIEWMODLES.Commands;assembly=TLKVIEWMODLES"
              vc:OpenDlg.Show="{Binding OpenDlg}" 
-             vc:FontDlg.Show="{Binding FontDlg}"
-             vc:MsgBox.Show="{Binding MsgBox}">
+             vc:FontDlg.Show="{Binding FontDlg}">
     <Grid>
         <Menu>
             <MenuItem Header="파일">

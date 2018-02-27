@@ -134,8 +134,7 @@ namespace TLKVIEWMODLES.Commands
             context.View.FilterText = context.View.ReplaceText;
             context.View.ReplaceText = string.Empty;
 
-            context.View.MsgBoxText = string.Format("지정된 텍스트를 모두 변경했습니다. {0}", context.View.FilterText);
-            context.MsgBox = true;
+            context.View.MsgPopupShow(string.Format("지정된 텍스트를 모두 변경했습니다.\n {0}", context.View.FilterText));
         }
     }
 
@@ -160,8 +159,7 @@ namespace TLKVIEWMODLES.Commands
             context.View.FilterText = context.View.ReplaceText; 
             context.View.ReplaceText = string.Empty;
 
-            context.View.MsgBoxText = string.Format("총 {0}개 항목을 수정하였습니다.", total);
-            context.MsgBox = true;
+            context.View.MsgPopupShow(string.Format("총 {0}개 항목을 수정하였습니다.", total));
         }
     }
 }

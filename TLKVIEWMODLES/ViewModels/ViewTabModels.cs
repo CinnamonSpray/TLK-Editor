@@ -23,11 +23,14 @@ namespace TLKVIEWMODLES
             _View = view;
         }
 
-        public bool AddWorkTab(string filepath, string textencoding)
+        public void AddWorkTab(string filepath, string textencoding)
         {
             if (this.Any(tab => tab.TLKTexts.FilePath == filepath))
-                return false;
-            
+            {
+                _View.MsgPopupShow("해당 파일의 경로가 이미 존재합니다.");
+                return;
+            }
+     
             Add(new WorkTabItem(_Settings, _View)
             {
                 Owner = this,
@@ -38,11 +41,10 @@ namespace TLKVIEWMODLES
 
             if (!this[Count - 1].TLKTexts.InitializeFromFile(filepath, encoding))
             {
+                _SequenceNumber--;
                 RemoveWorkTab(Count - 1);
-                return false;
+                _View.MsgPopupShow("TLK 파일이 아닙니다.");
             }
-            
-            return true;
         }
 
         public void RemoveWorkTab(int index)
@@ -190,18 +192,7 @@ namespace TLKVIEWMODLES
             View = view;
         }
 
-        private SettingsContext _Settings;
-        public SettingsContext Settings
-        {
-            get { return _Settings; }
-            set { _Settings = value; }
-        }
-
-        private ViewContext _View;
-        public ViewContext View
-        {
-            get { return _View; }
-            set { _View = value; }
-        }
+        public SettingsContext Settings { get; set; }
+        public ViewContext View { get; set; }
     }
 }

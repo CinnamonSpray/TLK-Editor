@@ -103,6 +103,38 @@ namespace TLKVIEWMODLES.Contexts
             }
         }
 
+        private bool _MsgPopup = false;
+        public bool MsgPopup
+        {
+            get { return _MsgPopup; }
+            set
+            {
+                SetField(ref _MsgPopup, value, nameof(MsgPopup));
+            }
+        }
+
+        private string _MsgText;
+        public string MsgText
+        {
+            get { return _MsgText; }
+            set
+            {
+                SetField(ref _MsgText, value, nameof(MsgText));
+            }
+        }
+
+        public void ClearFilterControl()
+        {
+            FilterText = string.Empty;
+            ReplaceText = string.Empty;
+        }
+
+        public void MsgPopupShow(string text)
+        {
+            MsgText = text;
+            MsgPopup = true;
+        }
+
         // WorkTap 이 먼저 삭제된 후 호출될 경우 null index error 발생...
         private void WorkTabRefresh()
         {
@@ -113,14 +145,6 @@ namespace TLKVIEWMODLES.Contexts
         private void CheckFilterOrdinal()
         {
             FilterOrdinal = (FilterType.Text == FilterType) && ReplacePanel;
-        }
-
-        public string MsgBoxText { get; set; }
-
-        public void ClearFilterControl()
-        {
-            FilterText = string.Empty;
-            ReplaceText = string.Empty;
         }
 
         private WorkTabsModel _workTabs;
