@@ -2,8 +2,8 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:cc="clr-namespace:CustomControls;assembly=CustomControls"
-             xmlns:vc="clr-namespace:TLKAPP.ViewConverter"
-             xmlns:tlkcmd="clr-namespace:TLKVIEWMODLES.Commands;assembly=TLKVIEWMODLES">
+             xmlns:vcv="clr-namespace:TLKAPP.ViewConverter"
+             xmlns:cmd="clr-namespace:TLKVIEWMODLES.Commands;assembly=TLKVIEWMODLES">
 
     <Grid>
         <Grid.RowDefinitions>
@@ -18,7 +18,7 @@
             </Grid.ColumnDefinitions>
 
             <ToggleButton Name="ExpanderBtn" Grid.Column="0" Style="{StaticResource OnOffToggleStyle}" 
-                          IsChecked="{Binding View.ReplacePanel}"/>
+                          IsChecked="{Binding ReplacePanel}"/>
 
             <Grid Grid.Column="1" Margin="4,0,0,0">
                 <Grid.ColumnDefinitions>
@@ -28,17 +28,17 @@
                 
                 <ComboBox Grid.Column="0" Margin="0,0,4,0" SelectedIndex="0"
                           ItemsSource="{Binding Source={StaticResource FilterType}}"
-                          SelectedItem="{Binding View.FilterType, Mode=OneWayToSource}"/>
+                          SelectedItem="{Binding FilterType, Mode=OneWayToSource}"/>
 
                 <cc:HintTextBox Grid.Column="1" WaterMarkBrush="LightGray" WaterMarkText=" Input Text or Numer..."                 
-                                BaseText="{Binding View.FilterText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
-                                IsNumeric="{Binding View.FilterType, Converter={vc:FilterTypeConverter}, ConverterParameter={StaticResource FilterIndex}}"
+                                BaseText="{Binding FilterText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+                                IsNumeric="{Binding FilterType, Converter={vcv:FilterTypeConverter}, ConverterParameter={StaticResource FilterIndex}}"
                                 FontSize="16" FontFamily="{Binding Settings.FontFamilyName}"/>
             </Grid>
         </Grid>
 
         <Grid Grid.Row="1" Margin="20,0,0,0" 
-              IsEnabled="{Binding View.FilterType, Converter={vc:FilterTypeConverter}, ConverterParameter={StaticResource FilterText}}">
+              IsEnabled="{Binding FilterType, Converter={vcv:FilterTypeConverter}, ConverterParameter={StaticResource FilterText}}">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="64"/>
                 <ColumnDefinition/>
@@ -51,12 +51,12 @@
                 </Grid.ColumnDefinitions>
 
                 <Button Grid.Column="0" FontSize="16" Content="R" Margin="0,0,4,0"
-                        Command="{tlkcmd:ReplaceTLKTextCommand}"/>
+                        Command="{cmd:ReplaceTLKTextCommand}"/>
                 <Button Grid.Column="1" FontSize="16" Content="A" Margin="0,0,4,0"
-                        Command="{tlkcmd:ReplaceAllTLKTextCommand}"/>
+                        Command="{cmd:ReplaceAllTLKTextCommand}"/>
             </Grid>
 
-            <TextBox Grid.Column="1" Text="{Binding View.ReplaceText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+            <TextBox Grid.Column="1" Text="{Binding ReplaceText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                      FontSize="16" FontFamily="{Binding Settings.FontFamilyName}"/>
         </Grid>
     </Grid>

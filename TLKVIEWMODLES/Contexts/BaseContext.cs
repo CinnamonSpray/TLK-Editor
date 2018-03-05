@@ -27,14 +27,28 @@ namespace TLKVIEWMODLES.Contexts
                 if (value) FontDlg ^= value;
             }
         }
+
+        private object _CurrentContext;
+        public object CurrentContext
+        {
+            get { return _CurrentContext; }
+            set
+            {
+                SetField(ref _CurrentContext, value, nameof(CurrentContext));
+            }
+        }
   
         public SettingsContext Settings { get; private set; }
+        public MessageContext Message { get; private set; }
         public ViewContext View { get; private set; }
 
         public BaseContext()
         {
             Settings = new SettingsContext();
-            View = new ViewContext(Settings);
+            Message = new MessageContext();
+            View = new ViewContext(Settings, Message);
+
+            CurrentContext = View;
         }
     }
 }

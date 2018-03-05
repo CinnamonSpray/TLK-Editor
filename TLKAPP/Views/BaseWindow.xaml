@@ -1,16 +1,22 @@
 ﻿<Window  x:Class="TLKAPP.Views.BaseWindow" 
          xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" 
          xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-         xmlns:vc="clr-namespace:TLKAPP.ViewConverter"
+         xmlns:cc="clr-namespace:CustomControls;assembly=CustomControls"
+         xmlns:cmd="clr-namespace:TLKVIEWMODLES.Commands;assembly=TLKVIEWMODLES"
+         xmlns:vcv="clr-namespace:TLKAPP.ViewConverter"
          xmlns:views="clr-namespace:TLKAPP.Views"
-         xmlns:tlkcmd="clr-namespace:TLKVIEWMODLES.Commands;assembly=TLKVIEWMODLES"
          Title="TLK Text Editor" Height="600" Width="400"
-         Loaded="{tlkcmd:BaseLoadedCommand EvtArgsCvt={vc:SettingConverter}}"
-         Closed="{tlkcmd:BaseClosedCommand EvtArgsCvt={vc:SettingConverter}}">
+         Loaded="{cmd:BaseLoadedCommand EvtArgsCvt={vcv:SettingConverter}}"
+         Closed="{cmd:BaseClosedCommand EvtArgsCvt={vcv:SettingConverter}}">
+    
+    <Grid>
+        <DockPanel>
+            <views:MenuControl DockPanel.Dock="Top"/>
 
-    <DockPanel>
-        <views:MenuControl DockPanel.Dock="Top"/>
+            <ContentControl Content="{Binding CurrentContext}"/>
+        </DockPanel>
 
-        <views:WorkControl/>
-    </DockPanel>
+        <cc:MessagePopup DataContext="{Binding Message}"/>
+    </Grid>
+    
 </Window>

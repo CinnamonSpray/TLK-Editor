@@ -2,16 +2,16 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:cc="clr-namespace:CustomControls;assembly=CustomControls"
-             xmlns:vc="clr-namespace:TLKAPP.ViewConverter"
-             xmlns:tlkcmd="clr-namespace:TLKVIEWMODLES.Commands;assembly=TLKVIEWMODLES">
+             xmlns:vcv="clr-namespace:TLKAPP.ViewConverter"
+             xmlns:cmd="clr-namespace:TLKVIEWMODLES.Commands;assembly=TLKVIEWMODLES">
     <UniformGrid Rows="2">
 
         <cc:FilterListBox Grid.Row="0" Name="FilterListBox" ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                           SelectedIndex="{Binding TLKTextsSelectedIndex}" ViewSource="{Binding TLKTexts}"
                           FontSize="{Binding Settings.FontSize}" FontFamily="{Binding Settings.FontFamilyName}"
-                          MouseDoubleClick="{tlkcmd:GetTLKTextCommand EvtArgsCvt={vc:TLKTextSelectedItemConverter}}"
-                          RegisterView="{tlkcmd:InitTLKTextCommand EvtArgsCvt={vc:TLKTextViewConverter}}"
-                          ViewCount="{tlkcmd:FilterCountCommand EvtArgsCvt={vc:TLKTextsCountConverter}}">
+                          MouseDoubleClick="{cmd:GetTLKTextCommand EvtArgsCvt={vcv:TLKTextSelectedItemConverter}}"
+                          RegisterView="{cmd:InitTLKTextCommand EvtArgsCvt={vcv:TLKTextViewConverter}}"
+                          ViewCount="{cmd:FilterCountCommand EvtArgsCvt={vcv:TLKTextsCountConverter}}">
             <cc:FilterListBox.ItemTemplate>
                 <DataTemplate>
                     <cc:HighlightTextBlock

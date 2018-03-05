@@ -1,13 +1,10 @@
 ﻿using System;
 
+using PatternHelper.MVVM.WPF;
+
 namespace TLKVIEWMODLES.Type
 {
-    public interface ContextEvtArgs
-    {
-        object DataContext { get; set; }
-    }
-
-    public interface ConfigEvtArgs : ContextEvtArgs
+    public interface ConfigEvtArgs : ITargetContext
     {        
         void SettingLoad();
         void SettingSave();
@@ -17,7 +14,7 @@ namespace TLKVIEWMODLES.Type
         string TextEncoding { get; set; }
     }
 
-    public interface InitCollectionEvtArgs : ContextEvtArgs
+    public interface InitCollectionEvtArgs : ITargetContext
     {
         Predicate<object> Filter { set; }
         Action Refresh { get; }

@@ -1,29 +1,29 @@
 ﻿<UserControl x:Class="TLKAPP.Views.MenuControl"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:vc="clr-namespace:TLKAPP.ViewConverter"
-             xmlns:tlkcmd="clr-namespace:TLKVIEWMODLES.Commands;assembly=TLKVIEWMODLES"
-             vc:OpenDlg.Show="{Binding OpenDlg}" 
-             vc:FontDlg.Show="{Binding FontDlg}">
+             xmlns:vcv="clr-namespace:TLKAPP.ViewConverter"
+             xmlns:cmd="clr-namespace:TLKVIEWMODLES.Commands;assembly=TLKVIEWMODLES"
+             vcv:OpenDlg.Show="{Binding OpenDlg}" 
+             vcv:FontDlg.Show="{Binding FontDlg}">
     <Grid>
         <Menu>
             <MenuItem Header="파일">
-                <MenuItem Header="열기" Command="{tlkcmd:LoadFileCommand}"/>
-                <MenuItem Header="닫기" Command="{tlkcmd:UnloadFileCommand}"/>
+                <MenuItem Header="열기" Command="{cmd:LoadFileCommand}"/>
+                <MenuItem Header="닫기" Command="{cmd:UnloadFileCommand}"/>
                 <Separator/>
-                <MenuItem Header="종료" Command="{tlkcmd:WinCloseCommand}" CommandParameter="{Binding Converter={vc:WinCloseArgs}}"/>
+                <MenuItem Header="종료" Command="{cmd:WinCloseCommand}" CommandParameter="{Binding Converter={vcv:WinCloseArgs}}"/>
             </MenuItem>
             <MenuItem Header="도구">
                 <MenuItem Header="Encoding">
                     <StackPanel>
-                        <RadioButton GroupName="Encoding" Content="euc-kr" Command="{tlkcmd:EncodingCommand}"
-                                     IsChecked="{Binding Settings.TextEncoding, Mode=TwoWay, Converter={vc:TextEncodingConverter}, ConverterParameter=euc-kr}"/>
-                        <RadioButton GroupName="Encoding" Content="utf-8" Command="{tlkcmd:EncodingCommand}"
-                                     IsChecked="{Binding Settings.TextEncoding, Mode=TwoWay, Converter={vc:TextEncodingConverter}, ConverterParameter=utf-8}"/>
+                        <RadioButton GroupName="Encoding" Content="euc-kr" Command="{cmd:EncodingCommand}"
+                                     IsChecked="{Binding Settings.TextEncoding, Mode=TwoWay, Converter={vcv:TextEncodingConverter}, ConverterParameter=euc-kr}"/>
+                        <RadioButton GroupName="Encoding" Content="utf-8" Command="{cmd:EncodingCommand}"
+                                     IsChecked="{Binding Settings.TextEncoding, Mode=TwoWay, Converter={vcv:TextEncodingConverter}, ConverterParameter=utf-8}"/>
                     </StackPanel>
                 </MenuItem>
                 <Separator/>
-                <MenuItem Header="글꼴" Command="{tlkcmd:FontDlgCommand}"/>
+                <MenuItem Header="글꼴" Command="{cmd:FontDlgCommand}"/>
             </MenuItem>
         </Menu>
     </Grid>

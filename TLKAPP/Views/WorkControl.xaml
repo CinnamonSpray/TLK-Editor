@@ -1,9 +1,8 @@
 ﻿<UserControl x:Class="TLKAPP.Views.WorkControl"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:cc="clr-namespace:CustomControls;assembly=CustomControls"
              xmlns:view="clr-namespace:TLKAPP.Views"
-             xmlns:tlkcmd="clr-namespace:TLKVIEWMODLES.Commands;assembly=TLKVIEWMODLES">
+             xmlns:cmd="clr-namespace:TLKVIEWMODLES.Commands;assembly=TLKVIEWMODLES">
 
     <Grid Margin="4,4,4,4">
         <Grid.RowDefinitions>
@@ -15,9 +14,9 @@
         <view:FilterControl Grid.Row="0" Margin="0,0,0,4"/>
 
         <TabControl Grid.Row="1" Margin="0,0,0,4" 
-                    ItemsSource="{Binding View.WorkTabs}"
+                    ItemsSource="{Binding WorkTabs}"
                     ItemTemplate="{StaticResource CustomTabHeader}"
-                    SelectedIndex="{Binding View.WorkTabSelectedIndex}">
+                    SelectedIndex="{Binding WorkTabSelectedIndex}">
 
             <TabControl.ContentTemplate>
                 <DataTemplate>
@@ -40,17 +39,15 @@
                     <ColumnDefinition MinWidth="64"/>
                 </Grid.ColumnDefinitions>
                 <TextBlock Grid.Column="0" Name="TotalLabel" Text="총 항목: "/>
-                <TextBlock Grid.Column="1" Text="{Binding View.TotalCount}"/>
+                <TextBlock Grid.Column="1" Text="{Binding TotalCount}"/>
                 <TextBlock Grid.Column="2" Name="EditLabel" Text="필터 항목: "/>
-                <TextBlock Grid.Column="3" Text="{Binding View.FilterCount}"/>
+                <TextBlock Grid.Column="3" Text="{Binding FilterCount}"/>
             </Grid>
 
             <WrapPanel Grid.Column="1" HorizontalAlignment="Right" >
-                <Button Padding="8,0,8,0" FontSize="16" Content="Apply" Command="{tlkcmd:SetTLKTextCommand}"/>
+                <Button Padding="8,0,8,0" FontSize="16" Content="Apply" Command="{cmd:SetTLKTextCommand}"/>
             </WrapPanel>
         </Grid>
-
-        <cc:MessagePopup DataContext="{Binding View}"/>
 
     </Grid>
 

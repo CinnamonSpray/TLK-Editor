@@ -5,21 +5,22 @@ using System.Text;
 
 using PatternHelper.MVVM.WPF;
 using TLKMODELS;
-using TLKVIEWMODLES.Contexts;
 using TLKVIEWMODLES.Type;
 
-namespace TLKVIEWMODLES
+namespace TLKVIEWMODLES.Contexts
 {
     public class WorkTabsModel : ObservableCollection<WorkTabItem>
     {
         private static int _SequenceNumber = 1;
 
         private SettingsContext _Settings = null;
+        private MessageContext _Message = null;
         private ViewContext _View = null;
 
-        public WorkTabsModel(SettingsContext settings, ViewContext view)
+        public WorkTabsModel(SettingsContext settings, MessageContext message, ViewContext view)
         {
             _Settings = settings;
+            _Message = message;
             _View = view;
         }
 
@@ -27,11 +28,11 @@ namespace TLKVIEWMODLES
         {
             if (this.Any(tab => tab.TLKTexts.FilePath == filepath))
             {
-                _View.MsgPopupShow("해당 파일의 경로가 이미 존재합니다.");
+                _Message.Show("해당 파일의 경로가 이미 존재합니다.");
                 return;
             }
      
-            Add(new WorkTabItem(_Settings, _View)
+            Add(new WorkTabItem(_Settings, _Message, _View)
             {
                 Owner = this,
                 TabHeader = (_SequenceNumber++).ToString() + " file",
@@ -43,7 +44,7 @@ namespace TLKVIEWMODLES
             {
                 _SequenceNumber--;
                 RemoveWorkTab(Count - 1);
-                _View.MsgPopupShow("TLK 파일이 아닙니다.");
+                _Message.Show("TLK 파일이 아닙니다.");
             }
         }
 
@@ -89,6 +90,15 @@ namespace TLKVIEWMODLES
 
     public class WorkTabItem : TabItemModel<WorkTabItem>
     {
+        private TLKTextCollection _tLKTexts = new TLKTextCollection();
+        public TLKTextCollection TLKTexts { get { return _tLKTexts; } }
+
+        private EditTabsModel _editTabs = new EditTabsModel();
+        public EditTabsModel EditTabs { get { return _editTabs; } }
+
+        public WorkTabItem(SettingsContext settings, MessageContext message, ViewContext view) : 
+            base(settings, message, view) { }
+
         private Action _refresh;
         public Action Refresh
         {
@@ -137,14 +147,6 @@ namespace TLKVIEWMODLES
                 SetField(ref _EditTabSelectedIndex, value, nameof(EditTabSelectedIndex));
             }
         }
-
-        private TLKTextCollection _tLKTexts = new TLKTextCollection();
-        public TLKTextCollection TLKTexts { get { return _tLKTexts; } }
-
-        private EditTabsModel _editTabs = new EditTabsModel();
-        public EditTabsModel EditTabs { get { return _editTabs; } }
-
-        public WorkTabItem(SettingsContext settings, ViewContext view) : base(settings, view) { }
     }
 
     public class EditTabsModel : ObservableCollection<EditTabItem>
@@ -154,6 +156,9 @@ namespace TLKVIEWMODLES
 
     public class EditTabItem : TabItemModel<EditTabItem>
     {
+        public EditTabItem(SettingsContext settings, MessageContext message, ViewContext view) : 
+            base(settings, message, view) { }
+
         private string _TranslateText;
         public string TranslateText
         {
@@ -163,12 +168,21 @@ namespace TLKVIEWMODLES
                 SetField(ref _TranslateText, value, nameof(TranslateText));
             }
         }
-
-        public EditTabItem(SettingsContext settings, ViewContext view) : base(settings, view) { }
     }
 
     public class TabItemModel<T> : ViewModelBase
     {
+        public SettingsContext Settings { get; private set; }
+        public MessageContext Message { get; private set; }
+        public ViewContext View { get; private set; }
+
+        public TabItemModel(SettingsContext settings, MessageContext message, ViewContext view)
+        {
+            Settings = settings;
+            Message = message;
+            View = view;
+        }
+
         private ObservableCollection<T> _owner;
         public ObservableCollection<T> Owner
         {
@@ -185,14 +199,5 @@ namespace TLKVIEWMODLES
                 SetField(ref _tabHeader, value, nameof(TabHeader));
             }
         }
-
-        public TabItemModel(SettingsContext settings, ViewContext view)
-        {
-            Settings = settings;
-            View = view;
-        }
-
-        public SettingsContext Settings { get; set; }
-        public ViewContext View { get; set; }
     }
 }

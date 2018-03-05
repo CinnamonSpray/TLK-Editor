@@ -3,7 +3,9 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:sys="clr-namespace:System;assembly=mscorlib"
              xmlns:tlktype="clr-namespace:TLKVIEWMODLES.Type;assembly=TLKVIEWMODLES"
-             xmlns:tlkcmd="clr-namespace:TLKVIEWMODLES.Commands;assembly=TLKVIEWMODLES"
+             xmlns:cmd="clr-namespace:TLKVIEWMODLES.Commands;assembly=TLKVIEWMODLES"
+             xmlns:ctt="clr-namespace:TLKVIEWMODLES.Contexts;assembly=TLKVIEWMODLES"
+             xmlns:views="clr-namespace:TLKAPP.Views"
              StartupUri="Views/BaseWindow.xaml">
     <Application.Resources>
 
@@ -19,8 +21,12 @@
         <DataTemplate x:Key="CustomTabHeader">
             <WrapPanel Margin="0,2,0,0">
                 <TextBlock Text="{Binding TabHeader}" Margin="0,0,4,0" MinWidth="24"/>
-                <Button Content="X" FontWeight="Bold" Padding="4,0,4,0" Command="{tlkcmd:TabCloseCommand}"/>
+                <Button Content="X" FontWeight="Bold" Padding="4,0,4,0" Command="{cmd:TabCloseCommand}"/>
             </WrapPanel>
+        </DataTemplate>
+
+        <DataTemplate DataType="{x:Type ctt:ViewContext}">
+            <views:WorkControl/>
         </DataTemplate>
 
         <Style x:Key="OnOffToggleStyle" TargetType="ToggleButton">

@@ -52,7 +52,7 @@ namespace TLKVIEWMODLES.Commands
 
             if (tab.Any(o => int.Parse(o.TabHeader) == item.Index)) return;
 
-            tab.Add(new EditTabItem(context.Settings, context.View)
+            tab.Add(new EditTabItem(context.Settings, context.Message, context.View)
             {
                 Owner = tab,
                 TabHeader = item.Index.ToString(),
@@ -63,14 +63,14 @@ namespace TLKVIEWMODLES.Commands
         }
     }
 
-    public class SetTLKTextCommand : MarkupCommandExtension<BaseContext>
+    public class SetTLKTextCommand : MarkupCommandExtension<ViewContext>
     {
-        protected override void MarkupCommandExecute(BaseContext context)
+        protected override void MarkupCommandExecute(ViewContext context)
         {
             if (context == null) return;
 
-            var wtabs = context.View.WorkTabs;
-            var selectedwtab = context.View.WorkTabSelectedIndex;
+            var wtabs = context.WorkTabs;
+            var selectedwtab = context.WorkTabSelectedIndex;
 
             if (wtabs.Count <= 0) return;
 
@@ -88,7 +88,7 @@ namespace TLKVIEWMODLES.Commands
 
             etabs.Remove(etab);
 
-            context.View.FilterText = string.Empty;
+            context.FilterText = string.Empty;
 
             wtab.TLKTextsSelectedIndex = index;
         }
@@ -106,60 +106,60 @@ namespace TLKVIEWMODLES.Commands
         }
     }
 
-    public class ReplaceTLKTextCommand : MarkupCommandExtension<BaseContext>
+    public class ReplaceTLKTextCommand : MarkupCommandExtension<ViewContext>
     {
-        protected override void MarkupCommandExecute(BaseContext context)
+        protected override void MarkupCommandExecute(ViewContext context)
         {
             if (context == null) return;
 
-            if (string.IsNullOrEmpty(context.View.FilterText) ||
-                string.IsNullOrEmpty(context.View.ReplaceText)) return;
+            if (string.IsNullOrEmpty(context.FilterText) ||
+                string.IsNullOrEmpty(context.ReplaceText)) return;
 
-            var wtabs = context.View.WorkTabs;
+            var wtabs = context.WorkTabs;
 
             if (wtabs.Count <= 0) return;
 
-            var wtab = wtabs[context.View.WorkTabSelectedIndex];
+            var wtab = wtabs[context.WorkTabSelectedIndex];
 
-            var item  = wtab.TLKTexts.GetTLKText(context.View.FilterText, true);
+            var item  = wtab.TLKTexts.GetTLKText(context.FilterText, true);
 
             if (item == null) return;
 
-            wtab.TLKTexts.SetTLKText(item.Index, item.Text.Replace(context.View.FilterText, context.View.ReplaceText));
+            wtab.TLKTexts.SetTLKText(item.Index, item.Text.Replace(context.FilterText, context.ReplaceText));
 
             wtab.Refresh();
 
             if (wtab.View.FilterCount != 0) return;
 
-            context.View.FilterText = context.View.ReplaceText;
-            context.View.ReplaceText = string.Empty;
+            context.FilterText = context.ReplaceText;
+            context.ReplaceText = string.Empty;
 
-            context.View.MsgPopupShow(string.Format("지정된 텍스트를 모두 변경했습니다.\n {0}", context.View.FilterText));
+            context.Message.Show(string.Format("지정된 텍스트를 모두 변경했습니다.\n {0}", context.FilterText));
         }
     }
 
-    public class ReplaceAllTLKTextCommand : MarkupCommandExtension<BaseContext>
+    public class ReplaceAllTLKTextCommand : MarkupCommandExtension<ViewContext>
     {
-        protected override void MarkupCommandExecute(BaseContext context)
+        protected override void MarkupCommandExecute(ViewContext context)
         {
             if (context == null) return;
 
-            if (string.IsNullOrEmpty(context.View.FilterText) ||
-                string.IsNullOrEmpty(context.View.ReplaceText)) return;
+            if (string.IsNullOrEmpty(context.FilterText) ||
+                string.IsNullOrEmpty(context.ReplaceText)) return;
 
-            var wtabs = context.View.WorkTabs;
+            var wtabs = context.WorkTabs;
 
             if (wtabs.Count <= 0) return;
 
-            var wtab = wtabs[context.View.WorkTabSelectedIndex];
+            var wtab = wtabs[context.WorkTabSelectedIndex];
 
-            wtab.TLKTexts.ReplaceAll(context.View.FilterText, context.View.ReplaceText, out int total);
+            wtab.TLKTexts.ReplaceAll(context.FilterText, context.ReplaceText, out int total);
 
             // FilterText 변경 시 Refresh 호출..
-            context.View.FilterText = context.View.ReplaceText; 
-            context.View.ReplaceText = string.Empty;
+            context.FilterText = context.ReplaceText; 
+            context.ReplaceText = string.Empty;
 
-            context.View.MsgPopupShow(string.Format("총 {0}개 항목을 수정하였습니다.", total));
+            context.Message.Show(string.Format("총 {0}개 항목을 수정하였습니다.", total));
         }
     }
 }

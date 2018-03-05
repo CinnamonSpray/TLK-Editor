@@ -62,6 +62,7 @@
     <Compile Include="Commands\MenuCommands.cs" />
     <Compile Include="Commands\ViewCommands.cs" />
     <Compile Include="Contexts\BaseContext.cs" />
+    <Compile Include="Contexts\MessageContext.cs" />
     <Compile Include="Contexts\SettingsContext.cs" />
     <Compile Include="Contexts\ViewContext.cs" />
     <Compile Include="ViewModels\ViewTabModels.cs" />
