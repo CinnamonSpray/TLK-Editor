@@ -68,36 +68,43 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="ViewConverter\ViewConverter.cs" />
-    <Compile Include="Views\EditControl.xaml.cs">
+    <Compile Include="Views\Compare\CompareContent.xaml.cs">
+      <DependentUpon>CompareContent.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Edit\EditControl.xaml.cs">
       <DependentUpon>EditControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\FilterControl.xaml.cs">
+    <Compile Include="Views\Edit\FilterControl.xaml.cs">
       <DependentUpon>FilterControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\MenuControl.xaml.cs">
+    <Compile Include="Views\Menu\MenuControl.xaml.cs">
       <DependentUpon>MenuControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\WorkControl.xaml.cs">
-      <DependentUpon>WorkControl.xaml</DependentUpon>
+    <Compile Include="Views\Edit\EditContent.xaml.cs">
+      <DependentUpon>EditContent.xaml</DependentUpon>
     </Compile>
     <Compile Include="_Settings\Settings.cs" />
     <Compile Include="Views\BaseWindow.xaml.cs">
       <DependentUpon>BaseWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="Views\EditControl.xaml">
+    <Page Include="Views\Compare\CompareContent.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\FilterControl.xaml">
+    <Page Include="Views\Edit\EditControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\MenuControl.xaml">
+    <Page Include="Views\Edit\FilterControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\WorkControl.xaml">
+    <Page Include="Views\Menu\MenuControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Edit\EditContent.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -146,6 +153,7 @@
   <ItemGroup>
     <None Include="FodyWeavers.xml" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>xcopy "$(TargetDir)CustomControls.dll" "..\\..\\..\\lib_exe\" /Y

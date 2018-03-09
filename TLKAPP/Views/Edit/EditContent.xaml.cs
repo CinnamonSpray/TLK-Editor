@@ -5,9 +5,9 @@ namespace TLKAPP.Views
     /// <summary>
     /// WorkControl.xaml에 대한 상호 작용 논리
     /// </summary>
-    public partial class WorkControl : UserControl
+    public partial class EditContent : UserControl
     {
-        public WorkControl()
+        public EditContent()
         {
             InitializeComponent();
         }

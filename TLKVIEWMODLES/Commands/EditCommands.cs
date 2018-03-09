@@ -14,7 +14,7 @@ namespace TLKVIEWMODLES.Commands
             switch(item)
             {
                 case WorkTabItem wtab:
-                    wtab.View.ClearFilterControl();
+                    wtab.Edit.ClearFilterControl();
                     wtab.Owner.Remove(wtab);
                     break;
 
@@ -29,7 +29,7 @@ namespace TLKVIEWMODLES.Commands
     {
         protected override void MarkupCommandExecute(InitCollectionEvtArgs args)
         {
-            var context = args.DataContext as WorkTabItem;
+            var context = args.DataContext;
 
             if (context != null)
             {
@@ -52,7 +52,7 @@ namespace TLKVIEWMODLES.Commands
 
             if (tab.Any(o => int.Parse(o.TabHeader) == item.Index)) return;
 
-            tab.Add(new EditTabItem(context.Settings, context.Message, context.View)
+            tab.Add(new EditTabItem(context.Settings, context.Edit)
             {
                 Owner = tab,
                 TabHeader = item.Index.ToString(),
@@ -63,9 +63,9 @@ namespace TLKVIEWMODLES.Commands
         }
     }
 
-    public class SetTLKTextCommand : MarkupCommandExtension<ViewContext>
+    public class SetTLKTextCommand : MarkupCommandExtension<EditContext>
     {
-        protected override void MarkupCommandExecute(ViewContext context)
+        protected override void MarkupCommandExecute(EditContext context)
         {
             if (context == null) return;
 
@@ -102,13 +102,13 @@ namespace TLKVIEWMODLES.Commands
 
             if (context == null) return;
 
-            context.View.FilterCount = args.cnt;
+            context.Edit.FilterCount = args.cnt;
         }
     }
 
-    public class ReplaceTLKTextCommand : MarkupCommandExtension<ViewContext>
+    public class ReplaceTLKTextCommand : MarkupCommandExtension<EditContext>
     {
-        protected override void MarkupCommandExecute(ViewContext context)
+        protected override void MarkupCommandExecute(EditContext context)
         {
             if (context == null) return;
 
@@ -129,18 +129,18 @@ namespace TLKVIEWMODLES.Commands
 
             wtab.Refresh();
 
-            if (wtab.View.FilterCount != 0) return;
+            if (wtab.Edit.FilterCount != 0) return;
 
             context.FilterText = context.ReplaceText;
             context.ReplaceText = string.Empty;
 
-            context.Message.Show(string.Format("지정된 텍스트를 모두 변경했습니다.\n {0}", context.FilterText));
+            context.MsgPopup.Show(string.Format("지정된 텍스트를 모두 변경했습니다.\n {0}", context.FilterText));
         }
     }
 
-    public class ReplaceAllTLKTextCommand : MarkupCommandExtension<ViewContext>
+    public class ReplaceAllTLKTextCommand : MarkupCommandExtension<EditContext>
     {
-        protected override void MarkupCommandExecute(ViewContext context)
+        protected override void MarkupCommandExecute(EditContext context)
         {
             if (context == null) return;
 
@@ -159,7 +159,7 @@ namespace TLKVIEWMODLES.Commands
             context.FilterText = context.ReplaceText; 
             context.ReplaceText = string.Empty;
 
-            context.Message.Show(string.Format("총 {0}개 항목을 수정하였습니다.", total));
+            context.MsgPopup.Show(string.Format("총 {0}개 항목을 수정하였습니다.", total));
         }
     }
 }

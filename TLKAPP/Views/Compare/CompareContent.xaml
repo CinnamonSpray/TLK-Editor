@@ -1,0 +1,12 @@
+﻿<UserControl x:Class="TLKAPP.Views.CompareContent"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Grid>
+        <UniformGrid>
+            <TextBlock Grid.Row="0" Grid.Column="0" Text="Label01"/>
+            <ComboBox Grid.Row="0" Grid.Column="1"/>
+            <TextBlock Grid.Row="1" Grid.Column="0" Text="Label02"/>
+            <ComboBox Grid.Row="1" Grid.Column="1"/>
+        </UniformGrid>
+    </Grid>
+</UserControl>

@@ -25,8 +25,8 @@
             </WrapPanel>
         </DataTemplate>
 
-        <DataTemplate DataType="{x:Type ctt:ViewContext}">
-            <views:WorkControl/>
+        <DataTemplate DataType="{x:Type ctt:EditContext}">
+            <views:EditContent/>
         </DataTemplate>
 
         <Style x:Key="OnOffToggleStyle" TargetType="ToggleButton">

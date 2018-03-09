@@ -13,39 +13,40 @@ namespace TLKVIEWMODLES.Contexts
     {
         private static int _SequenceNumber = 1;
 
-        private SettingsContext _Settings = null;
-        private MessageContext _Message = null;
-        private ViewContext _View = null;
+        private IGlobalContexts _Global = null;
+        private EditContext _View = null;
 
-        public WorkTabsModel(SettingsContext settings, MessageContext message, ViewContext view)
+        public WorkTabsModel(IGlobalContexts global, EditContext view)
         {
-            _Settings = settings;
-            _Message = message;
+            _Global = global;
             _View = view;
         }
 
         public void AddWorkTab(string filepath, string textencoding)
         {
-            if (this.Any(tab => tab.TLKTexts.FilePath == filepath))
+            if (this.Any(item => item.TLKTexts.FilePath == filepath))
             {
-                _Message.Show("해당 파일의 경로가 이미 존재합니다.");
+                _Global.MsgPopup.Show("해당 파일의 경로가 이미 존재합니다.");
                 return;
             }
      
-            Add(new WorkTabItem(_Settings, _Message, _View)
+            Add(new WorkTabItem(_Global, _View)
             {
                 Owner = this,
                 TabHeader = (_SequenceNumber++).ToString() + " file",
             });
 
+            var tab = this[Count - 1];
             var encoding = Encoding.GetEncoding(textencoding);
 
-            if (!this[Count - 1].TLKTexts.InitializeFromFile(filepath, encoding))
+            if (!tab.TLKTexts.InitializeFromFile(filepath, encoding))
             {
                 _SequenceNumber--;
                 RemoveWorkTab(Count - 1);
-                _Message.Show("TLK 파일이 아닙니다.");
+                _Global.MsgPopup.Show("TLK 파일이 아닙니다.");
             }
+
+            _Global.TLKs.Add(tab.TLKTexts);
         }
 
         public void RemoveWorkTab(int index)
@@ -84,20 +85,19 @@ namespace TLKVIEWMODLES.Contexts
 
             tab.TLKTexts.Clear();
 
+            _Global.TLKs.Remove(tab.TLKTexts);
+
             GC.Collect();
         }
     }
 
     public class WorkTabItem : TabItemModel<WorkTabItem>
     {
-        private TLKTextCollection _tLKTexts = new TLKTextCollection();
-        public TLKTextCollection TLKTexts { get { return _tLKTexts; } }
+        public TLKTextCollection TLKTexts { get; } = new TLKTextCollection();
 
-        private EditTabsModel _editTabs = new EditTabsModel();
-        public EditTabsModel EditTabs { get { return _editTabs; } }
+        public EditTabsModel EditTabs { get; } = new EditTabsModel();
 
-        public WorkTabItem(SettingsContext settings, MessageContext message, ViewContext view) : 
-            base(settings, message, view) { }
+        public WorkTabItem(IGlobalContexts global, EditContext edit) : base(global, edit) { }
 
         private Action _refresh;
         public Action Refresh
@@ -105,8 +105,8 @@ namespace TLKVIEWMODLES.Contexts
             get
             {
                 // Focus Action...
-                if (FilterType.Index == View.FilterType &&
-                    int.TryParse(View.FilterText, out int result))
+                if (FilterType.Index == Edit.FilterType &&
+                    int.TryParse(Edit.FilterText, out int result))
                 {
                     TLKTextsSelectedIndex = result;
                 }
@@ -120,10 +120,10 @@ namespace TLKVIEWMODLES.Contexts
         {
             var tlkitem = item as TLKTEXT;
 
-            var role = View.FilterOrdinal ?  StringComparison.Ordinal : StringComparison.OrdinalIgnoreCase;
+            var role = Edit.FilterOrdinal ?  StringComparison.Ordinal : StringComparison.OrdinalIgnoreCase;
 
-            if (tlkitem != null && FilterType.Text == View.FilterType)
-                return tlkitem.Text.IndexOf(View.FilterText, role) >= 0;
+            if (tlkitem != null && FilterType.Text == Edit.FilterType)
+                return tlkitem.Text.IndexOf(Edit.FilterText, role) >= 0;
 
             return true;
         }
@@ -156,8 +156,7 @@ namespace TLKVIEWMODLES.Contexts
 
     public class EditTabItem : TabItemModel<EditTabItem>
     {
-        public EditTabItem(SettingsContext settings, MessageContext message, ViewContext view) : 
-            base(settings, message, view) { }
+        public EditTabItem(SettingsContext settings, EditContext edit) : base(settings, edit) { }
 
         private string _TranslateText;
         public string TranslateText
@@ -173,22 +172,22 @@ namespace TLKVIEWMODLES.Contexts
     public class TabItemModel<T> : ViewModelBase
     {
         public SettingsContext Settings { get; private set; }
-        public MessageContext Message { get; private set; }
-        public ViewContext View { get; private set; }
+        public MessageContext MsgPopup { get; private set; }
+        public EditContext Edit { get; private set; }
 
-        public TabItemModel(SettingsContext settings, MessageContext message, ViewContext view)
+        public TabItemModel(SettingsContext settings, EditContext edit)
         {
             Settings = settings;
-            Message = message;
-            View = view;
+            Edit = edit;
         }
 
-        private ObservableCollection<T> _owner;
-        public ObservableCollection<T> Owner
+        public TabItemModel(IGlobalContexts global, EditContext edit)
         {
-            get { return _owner; }
-            set { _owner = value; }
+            Settings = global.Settings;
+            MsgPopup = global.MsgPopup;
+            Edit = edit;
         }
+        public ObservableCollection<T> Owner { get; set; }
 
         private string _tabHeader;
         public string TabHeader

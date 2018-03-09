@@ -1,5 +1,4 @@
 ﻿using PatternHelper.MVVM.WPF;
-using TLKVIEWMODLES.Contexts;
 using TLKVIEWMODLES.Type;
 
 namespace TLKVIEWMODLES.Commands
@@ -8,18 +7,15 @@ namespace TLKVIEWMODLES.Commands
     {
         protected override void MarkupCommandExecute(ConfigEvtArgs config)
         {
-            if (config.DataContext == null)
-            {
-                config.SettingLoad();
+            if (config.DataContext == null) return;
 
-                var context = new BaseContext();
+            var context = config.DataContext;
 
-                context.Settings.FontFamilyName = config.FontFamilyName;
-                context.Settings.FontSize = config.FontSize;
-                context.Settings.TextEncoding = config.TextEncoding;
+            config.SettingLoad();
 
-                config.DataContext = context;
-            }
+            context.Settings.FontFamilyName = config.FontFamilyName;
+            context.Settings.FontSize = config.FontSize;
+            context.Settings.TextEncoding = config.TextEncoding;
         }
     }
 
@@ -27,16 +23,15 @@ namespace TLKVIEWMODLES.Commands
     {
         protected override void MarkupCommandExecute(ConfigEvtArgs config)
         {
-            if (config.DataContext != null)
-            {
-                var context = (BaseContext)config.DataContext;
+            if (config.DataContext == null) return;
 
-                config.FontFamilyName = context.Settings.FontFamilyName;
-                config.FontSize = context.Settings.FontSize;
-                config.TextEncoding = context.Settings.TextEncoding;
+            var context = config.DataContext;
 
-                config.SettingSave();
-            }
+            config.FontFamilyName = context.Settings.FontFamilyName;
+            config.FontSize = context.Settings.FontSize;
+            config.TextEncoding = context.Settings.TextEncoding;
+
+            config.SettingSave();
         }
     }
 }

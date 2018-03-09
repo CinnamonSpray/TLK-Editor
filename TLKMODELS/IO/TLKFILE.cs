@@ -224,6 +224,8 @@ namespace TLKMODELS.IO
 
             fs.Seek(fileDataOff + oldIndex, SeekOrigin.Begin);
             bw.Write(newbuf);
+
+            Buff = null;
         }
 
         private void ModifyEntries(int entriseNumber, int textLength)

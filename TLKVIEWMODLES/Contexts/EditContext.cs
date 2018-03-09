@@ -3,17 +3,17 @@ using TLKVIEWMODLES.Type;
 
 namespace TLKVIEWMODLES.Contexts
 {
-    public class ViewContext : ViewModelBase
+    public class EditContext : ViewModelBase
     {
         public WorkTabsModel WorkTabs { get; private set; }
-        public MessageContext Message { get; private set; }
+        public MessageContext MsgPopup { get; private set; }
 
-        public ViewContext() { }
+        public EditContext() { }
 
-        public ViewContext(SettingsContext settings, MessageContext message)
+        public EditContext(IGlobalContexts global)
         {
-            WorkTabs = new WorkTabsModel(settings, message, this);
-            Message = message;
+            WorkTabs = new WorkTabsModel(global, this);
+            MsgPopup = global.MsgPopup;
         }
 
         private FilterType _FilterType;

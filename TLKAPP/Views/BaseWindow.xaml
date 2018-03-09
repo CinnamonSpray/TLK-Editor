@@ -3,11 +3,16 @@
          xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
          xmlns:cc="clr-namespace:CustomControls;assembly=CustomControls"
          xmlns:cmd="clr-namespace:TLKVIEWMODLES.Commands;assembly=TLKVIEWMODLES"
+         xmlns:ctt="clr-namespace:TLKVIEWMODLES.Contexts;assembly=TLKVIEWMODLES"
          xmlns:vcv="clr-namespace:TLKAPP.ViewConverter"
          xmlns:views="clr-namespace:TLKAPP.Views"
          Title="TLK Text Editor" Height="600" Width="400"
          Loaded="{cmd:BaseLoadedCommand EvtArgsCvt={vcv:SettingConverter}}"
          Closed="{cmd:BaseClosedCommand EvtArgsCvt={vcv:SettingConverter}}">
+
+    <Window.DataContext>
+        <ctt:BaseContext/>
+    </Window.DataContext>
     
     <Grid>
         <DockPanel>
@@ -16,7 +21,7 @@
             <ContentControl Content="{Binding CurrentContext}"/>
         </DockPanel>
 
-        <cc:MessagePopup DataContext="{Binding Message}"/>
+        <cc:MessagePopup DataContext="{Binding MsgPopup}"/>
     </Grid>
     
 </Window>

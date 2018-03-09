@@ -21,9 +21,9 @@ namespace TLKVIEWMODLES.Commands
         {
             if (context == null) return;
 
-            context.View.ClearFilterControl();
+            context.Edit.ClearFilterControl();
 
-            context.View.WorkTabs.RemoveWorkTab(context.View.WorkTabSelectedIndex);
+            context.Edit.WorkTabs.RemoveWorkTab(context.Edit.WorkTabSelectedIndex);
         }
     }
 
@@ -41,10 +41,10 @@ namespace TLKVIEWMODLES.Commands
         {
             if (context == null) return;
 
-            context.View.ClearFilterControl();
+            context.Edit.ClearFilterControl();
 
-            context.View.WorkTabs.ReloadWorkTab(
-                context.View.WorkTabSelectedIndex, context.Settings.TextEncoding);
+            context.Edit.WorkTabs.ReloadWorkTab(
+                context.Edit.WorkTabSelectedIndex, context.Settings.TextEncoding);
         }
     }
 

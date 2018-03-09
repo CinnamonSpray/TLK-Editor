@@ -27,11 +27,11 @@ namespace TLKAPP.ViewConverter
 
             if (string.IsNullOrEmpty(dlg.FileName)) return;
 
-            var tabs = context.View.WorkTabs;
+            var tabs = context.Edit.WorkTabs;
 
             tabs.AddWorkTab(dlg.FileName, context.Settings.TextEncoding);
 
-            context.View.WorkTabSelectedIndex = tabs.Count - 1;
+            context.Edit.WorkTabSelectedIndex = tabs.Count - 1;
         }
     }
 
@@ -119,32 +119,14 @@ namespace TLKAPP.ViewConverter
                 _fe = fe;
             }
 
-            public object DataContext
+            public BaseContext DataContext
             {
-                get { return _fe.DataContext; }
-                set { _fe.DataContext = value; }
+                get { return (BaseContext)_fe.DataContext; }
             }
 
-            private string _fontFamilyName;
-            public string FontFamilyName
-            {
-                get { return _fontFamilyName; }
-                set { _fontFamilyName = value; }
-            }
-
-            private double _fontSize;
-            public double FontSize
-            {
-                get { return _fontSize; }
-                set { _fontSize = value; }
-            }
-
-            private string _textEncoding;
-            public string TextEncoding
-            {
-                get { return _textEncoding; }
-                set { _textEncoding = value; }
-            }
+            public string FontFamilyName { get; set; }
+            public double FontSize { get; set; }
+            public string TextEncoding { get; set; }
 
             public void SettingLoad()
             {
@@ -194,7 +176,7 @@ namespace TLKAPP.ViewConverter
             {
                 return new TLKTextViewArgs(lstbox.ItemsSource)
                 {
-                    DataContext = lstbox.DataContext,
+                    DataContext = (WorkTabItem)lstbox.DataContext,
                 };
             }
 
@@ -213,7 +195,7 @@ namespace TLKAPP.ViewConverter
                 get { return _collection.Refresh; }
             }
 
-            public object DataContext { get; set; }
+            public WorkTabItem DataContext { get; set; }
 
             private ICollectionView _collection;
 
