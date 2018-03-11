@@ -3,7 +3,8 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:cc="clr-namespace:CustomControls;assembly=CustomControls"
              xmlns:vcv="clr-namespace:TLKAPP.ViewConverter"
-             xmlns:cmd="clr-namespace:TLKVIEWMODLES.Commands;assembly=TLKVIEWMODLES">
+             xmlns:cmd="clr-namespace:TLKVIEWMODLES.Commands;assembly=TLKVIEWMODLES"
+             xmlns:cmdtype="clr-namespace:TLKVIEWMODLES.Type;assembly=TLKVIEWMODLES">
 
     <Grid>
         <Grid.RowDefinitions>
@@ -51,9 +52,9 @@
                 </Grid.ColumnDefinitions>
 
                 <Button Grid.Column="0" FontSize="16" Content="R" Margin="0,0,4,0"
-                        Command="{cmd:ReplaceTLKTextCommand}"/>
+                        Command="{cmd:ReplaceTLKTextCommand}" CommandParameter="{x:Static cmdtype:CmdID.Replace}"/>
                 <Button Grid.Column="1" FontSize="16" Content="A" Margin="0,0,4,0"
-                        Command="{cmd:ReplaceAllTLKTextCommand}"/>
+                        Command="{cmd:ReplaceTLKTextCommand}" CommandParameter="{x:Static cmdtype:CmdID.ReplaceAll}"/>
             </Grid>
 
             <TextBox Grid.Column="1" Text="{Binding ReplaceText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"

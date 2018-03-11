@@ -1,11 +1,8 @@
 ﻿using System;
 
-using PatternHelper.MVVM.WPF;
-using TLKVIEWMODLES.Contexts;
-
 namespace TLKVIEWMODLES.Type
 {
-    public interface ConfigEvtArgs : ITargetContext<BaseContext>
+    public interface ConfigEvtArgs
     {        
         void SettingLoad();
         void SettingSave();
@@ -15,7 +12,7 @@ namespace TLKVIEWMODLES.Type
         string TextEncoding { get; set; }
     }
 
-    public interface InitCollectionEvtArgs : ITargetContext<WorkTabItem>
+    public interface InitCollectionEvtArgs
     {
         Predicate<object> Filter { set; }
         Action Refresh { get; }

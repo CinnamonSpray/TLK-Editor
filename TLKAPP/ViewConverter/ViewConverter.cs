@@ -119,11 +119,6 @@ namespace TLKAPP.ViewConverter
                 _fe = fe;
             }
 
-            public BaseContext DataContext
-            {
-                get { return (BaseContext)_fe.DataContext; }
-            }
-
             public string FontFamilyName { get; set; }
             public double FontSize { get; set; }
             public string TextEncoding { get; set; }
@@ -174,10 +169,7 @@ namespace TLKAPP.ViewConverter
 
             if (lstbox != null)
             {
-                return new TLKTextViewArgs(lstbox.ItemsSource)
-                {
-                    DataContext = (WorkTabItem)lstbox.DataContext,
-                };
+                return new TLKTextViewArgs(lstbox.ItemsSource);
             }
 
             return Binding.DoNothing;
@@ -194,8 +186,6 @@ namespace TLKAPP.ViewConverter
             {
                 get { return _collection.Refresh; }
             }
-
-            public WorkTabItem DataContext { get; set; }
 
             private ICollectionView _collection;
 

@@ -171,6 +171,18 @@ namespace TLKVIEWMODLES.Contexts
 
     public class TabItemModel<T> : ViewModelBase
     {
+        public ObservableCollection<T> Owner { get; set; }
+
+        private string _tabHeader;
+        public string TabHeader
+        {
+            get { return _tabHeader; }
+            set
+            {
+                SetField(ref _tabHeader, value, nameof(TabHeader));
+            }
+        }
+
         public SettingsContext Settings { get; private set; }
         public MessageContext MsgPopup { get; private set; }
         public EditContext Edit { get; private set; }
@@ -186,17 +198,6 @@ namespace TLKVIEWMODLES.Contexts
             Settings = global.Settings;
             MsgPopup = global.MsgPopup;
             Edit = edit;
-        }
-        public ObservableCollection<T> Owner { get; set; }
-
-        private string _tabHeader;
-        public string TabHeader
-        {
-            get { return _tabHeader; }
-            set
-            {
-                SetField(ref _tabHeader, value, nameof(TabHeader));
-            }
         }
     }
 }

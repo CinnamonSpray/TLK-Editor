@@ -5,4 +5,10 @@
         Text,
         Index
     }
+
+    public enum CmdID : int
+    {
+        Replace,
+        ReplaceAll
+    }
 }
