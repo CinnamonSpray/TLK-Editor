@@ -1,19 +1,15 @@
-﻿using PatternHelper.MVVM.WPF;
+﻿using TLK.IO.MODELS;
 using TLKVIEWMODLES.Type;
 
 namespace TLKVIEWMODLES.Contexts
 {
-    public class EditContext : ViewModelBase
+    public class WorkContext : TabContext<WorkTabsModel, WorkTabItem>
     {
-        public WorkTabsModel WorkTabs { get; private set; }
-        public MessageContext MsgPopup { get; private set; }
-
-        public EditContext() { }
-
-        public EditContext(IGlobalContexts global)
+        public WorkContext(IGlobalContexts global) : base(global)
         {
-            WorkTabs = new WorkTabsModel(global, this);
-            MsgPopup = global.MsgPopup;
+            Tabs = new WorkTabsModel(global, this);
+
+            _SelectedTLKTEXT = new TLKTEXT(0, string.Empty);
         }
 
         private FilterType _FilterType;
@@ -24,7 +20,7 @@ namespace TLKVIEWMODLES.Contexts
             {
                 SetField(ref _FilterType, value, nameof(FilterType));
 
-                ClearFilterControl();
+                ClearFilterText();
 
                 CheckFilterOrdinal();
             }
@@ -37,8 +33,6 @@ namespace TLKVIEWMODLES.Contexts
             set
             {
                 SetField(ref _FilterText, value, nameof(FilterText));
-
-                WorkTabRefresh();
             }
         }
 
@@ -49,8 +43,6 @@ namespace TLKVIEWMODLES.Contexts
             set
             {
                 SetField(ref _FilterOrdinal, value, nameof(FilterOrdinal));
-
-                WorkTabRefresh();
             }
         }
 
@@ -76,24 +68,6 @@ namespace TLKVIEWMODLES.Contexts
             }
         }
 
-        private int _WorkTabSelectedIndex = -1;
-        public int WorkTabSelectedIndex
-        {
-            get { return _WorkTabSelectedIndex; }
-            set
-            {
-                if (value < 0) TotalCount = 0;
-                else
-                {
-                    TotalCount = WorkTabs[value].TLKTexts.Count;
-
-                    WorkTabs[value].Settings.TextEncoding = WorkTabs[value].TLKTexts.TextEncoding.HeaderName;
-                }
-
-                SetField(ref _WorkTabSelectedIndex, value, nameof(WorkTabSelectedIndex));
-            }
-        }
-
         private int _TotalCount;
         public int TotalCount
         {
@@ -114,17 +88,38 @@ namespace TLKVIEWMODLES.Contexts
             }
         }
 
-        public void ClearFilterControl()
+        private static TLKTEXT _SelectedTLKTEXT;
+        public TLKTEXT SelectedTLKTEXT
+        {
+            get { return _SelectedTLKTEXT; }
+            set
+            {
+                SetField(ref _SelectedTLKTEXT, value, nameof(SelectedTLKTEXT));
+            }
+        }
+
+        protected override void OnTabSelectedItem(WorkTabItem item)
+        {
+            if (item != null)
+            {
+                TotalCount = item.TLKTexts.Count;
+
+                item.Settings.TextEncoding = item.TLKTexts.TextEncoding.HeaderName;
+            }
+            else TotalCount = 0;
+        }
+
+        public void ClearFilterText()
         {
             FilterText = string.Empty;
             ReplaceText = string.Empty;
         }
 
-        // WorkTap 이 먼저 삭제된 후 호출될 경우 null index error 발생...
-        private void WorkTabRefresh()
+        public void RefreshFilterView()
         {
-            if (WorkTabSelectedIndex > -1 && WorkTabSelectedIndex < WorkTabs.Count)
-                WorkTabs[WorkTabSelectedIndex].Refresh();
+            var temp = FilterText;
+            FilterText = string.Empty;
+            FilterText = temp;
         }
 
         private void CheckFilterOrdinal()

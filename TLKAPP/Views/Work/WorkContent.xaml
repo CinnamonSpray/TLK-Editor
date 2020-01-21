@@ -1,0 +1,125 @@
+﻿<cc:CustomUserControl x:Class="TLKAPP.Views.WorkContent"
+                      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                      xmlns:local="clr-namespace:TLKAPP.Views.Edit"
+                      xmlns:cc="clr-namespace:CustomControls;assembly=CustomControls"
+                      xmlns:vcv="clr-namespace:TLKAPP.ViewConverter"
+                      xmlns:cmd="clr-namespace:TLKVIEWMODLES.Commands;assembly=TLKVIEWMODLES"
+                      xmlns:cmdtype="clr-namespace:TLKVIEWMODLES.Type;assembly=TLKVIEWMODLES">
+
+    <Grid Margin="4,4,4,4">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition/>
+            <RowDefinition Height="auto"/>
+        </Grid.RowDefinitions>
+
+        <Grid Grid.Row="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <cc:RowDefinitionExtended Height="*" Visible="{Binding ElementName=ExpanderBtn, Path=IsChecked}"/>
+            </Grid.RowDefinitions>
+
+            <Grid Grid.Row="0" Margin="0,0,0,4">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+
+                <ToggleButton Name="ExpanderBtn" Grid.Column="0" Style="{StaticResource OnOffToggleStyle}" 
+                              IsChecked="{Binding ReplacePanel}" Click="ExpanderBtn_Click"/>
+
+                <Grid Grid.Column="1" Margin="4,0,0,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="64"/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+
+                    <ComboBox Grid.Column="0" Margin="0,0,4,0" SelectedIndex="0"
+                          ItemsSource="{Binding Source={StaticResource FilterType}}"
+                          SelectedItem="{Binding FilterType, Mode=TwoWay}"/>
+
+                    <cc:HintTextBox Grid.Column="1" WaterMarkBrush="LightGray" WaterMarkText=" Input Text or Numer..."                 
+                                BaseText="{Binding FilterText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+                                IsNumeric="{Binding FilterType, Converter={vcv:FilterTypeConverter}, ConverterParameter={StaticResource FilterIndex}}"
+                                FontSize="16" FontFamily="{Binding Settings.FontFamilyName}"
+                                BaseTextChanged="HintTextBox_BaseTextChanged"/>
+                </Grid>
+            </Grid>
+
+            <Grid Grid.Row="1" Margin="20,0,0,0" 
+              IsEnabled="{Binding FilterType, Converter={vcv:FilterTypeConverter}, ConverterParameter={StaticResource FilterText}}">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="64"/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+
+                <Grid Grid.Column="0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+
+                    <Button Grid.Column="0" FontSize="16" Content="R" Margin="0,0,4,0" Command="{cmd:ReplaceTLKTextCommand}" 
+                            CommandParameter="{x:Static cmdtype:CmdID.Replace}"/>
+                    <Button Grid.Column="1" FontSize="16" Content="A" Margin="0,0,4,0" Command="{cmd:ReplaceTLKTextCommand}" 
+                            CommandParameter="{x:Static cmdtype:CmdID.ReplaceAll}"/>
+                </Grid>
+
+                <TextBox Grid.Column="1" Text="{Binding ReplaceText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                     FontSize="16" FontFamily="{Binding Settings.FontFamilyName}"/>
+            </Grid>
+        </Grid>
+        
+        <cc:CustomTabControl Grid.Row="1" Margin="0,4,0,4" ItemsSource="{Binding Tabs}" SelectedItem="{Binding TabSelectedItem}" 
+                             TabItemClosed="{cmd:TabItemClosedCommand EvtArgsCvt={vcv:TabCloseConverter}}">
+
+            <cc:CustomTabControl.ContentTemplate>
+                <DataTemplate>
+                    <local:EditControl/>
+                </DataTemplate>
+            </cc:CustomTabControl.ContentTemplate>
+            
+        </cc:CustomTabControl>
+        
+        <Grid Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+
+            <Grid Grid.Column="0" VerticalAlignment="Center" Margin="0,0,4,0">
+                <Grid.Resources>
+                    <Style TargetType="{x:Type TextBlock}">
+                        <Setter Property="Margin" Value="0,0,4,0"/>
+                        <Setter Property="FontSize" Value="14"/>
+                    </Style>
+                </Grid.Resources>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Column="0">
+                    <TextBlock.Inlines>
+                        <Run Text="Count:"/>
+                        <Run Text="{Binding FilterCount}"/>
+                        <Run Text="/"/>
+                        <Run Text="{Binding TotalCount}"/>
+                    </TextBlock.Inlines>
+                </TextBlock>
+                <TextBlock Grid.Column="1">
+                    <TextBlock.Inlines>
+                        <Run Text=" Number:"/>
+                        <Run Text="{Binding SelectedTLKTEXT.Index}"/>
+                    </TextBlock.Inlines>
+                </TextBlock>
+            </Grid>
+
+            <WrapPanel Grid.Column="1" HorizontalAlignment="Right">
+                <Button Name="ApplyBtn" Padding="8,2,8,2" FontSize="16" Content="Apply" Command="{cmd:SetTLKTextCommand}"/>
+            </WrapPanel>
+        </Grid>
+
+    </Grid>
+
+</cc:CustomUserControl>

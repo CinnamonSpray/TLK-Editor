@@ -1,30 +1,13 @@
 ﻿using System.Linq;
 
 using PatternHelper.MVVM.WPF;
-using TLKMODELS;
+
+using TLK.IO.MODELS;
 using TLKVIEWMODLES.Contexts;
 using TLKVIEWMODLES.Type;
 
 namespace TLKVIEWMODLES.Commands
 {
-    public class TabCloseCommand : MarkupCommandExtension<object, object>
-    {
-        protected override void MarkupCommandExecute(object args)
-        {
-            switch(DataContext)
-            {
-                case WorkTabItem wtab:
-                    wtab.Edit.ClearFilterControl();
-                    wtab.Owner.Remove(wtab);
-                    break;
-
-                case EditTabItem etab:
-                    etab.Owner.Remove(etab);
-                    break;
-            }
-        }
-    }
-
     public class InitTLKTextCommand : MarkupCommandExtension<WorkTabItem, InitCollectionEvtArgs>
     {
         protected override void MarkupCommandExecute(InitCollectionEvtArgs args)
@@ -32,7 +15,6 @@ namespace TLKVIEWMODLES.Commands
             if (DataContext != null)
             {
                 args.Filter = DataContext.Filter;
-                DataContext.Refresh = args.Refresh;
             }
         }
     }
@@ -45,109 +27,120 @@ namespace TLKVIEWMODLES.Commands
 
             if (DataContext == null || item == null) return;
 
-            var tab = DataContext.EditTabs;
+            var etabs = DataContext.Tabs;
 
-            if (tab.Any(o => int.Parse(o.TabHeader) == item.Index)) return;
+            if (etabs.Any(o => int.Parse(o.ContextName) == item.Index)) return;
 
-            tab.Add(new EditTabItem(DataContext.Settings, DataContext.Edit)
+            etabs.Add(new EditTabItem(DataContext.Settings)
             {
-                Owner = tab,
-                TabHeader = item.Index.ToString(),
+                ContextName = item.Index.ToString(),
                 TranslateText = item.Text
             });
 
-            DataContext.EditTabSelectedIndex = tab.Count - 1;
+            DataContext.TabSelectedItem = etabs[etabs.Count - 1];
         }
     }
 
-    public class SetTLKTextCommand : MarkupCommandExtension<EditContext, object>
+    public class SetTLKTextCommand : MarkupCommandExtension<WorkContext, object>
     {
         protected override void MarkupCommandExecute(object args)
         {
             if (DataContext == null) return;
+  
+            var wtitem = DataContext.TabSelectedItem;
 
-            var wtabs = DataContext.WorkTabs;
-            var selectedwtab = DataContext.WorkTabSelectedIndex;
+            if (wtitem == null) return;
 
-            if (wtabs.Count <= 0) return;
+            if (wtitem.TLKTexts.IsCompare)
+            {
+                DataContext.MsgPopup.Show("비교 중인 파일은 해당 기능을 사용할 수 없습니다.");
+                return;
+            }
 
-            var wtab = wtabs[selectedwtab];
-            var etabs = wtab.EditTabs;
-            var etab = etabs[wtab.EditTabSelectedIndex];
+            var etabs = wtitem.Tabs;
+            var etitem = wtitem.TabSelectedItem;
 
             if (etabs.Count <= 0) return;
 
-            int index = int.Parse(etab.TabHeader);
+            int index = int.Parse(etitem.ContextName);
 
-            wtab.TLKTexts.SetTLKText(index, etab.TranslateText);
+            wtitem.TLKTexts.SetTLKText(index, etitem.TranslateText);
 
-            wtab.Refresh();
-
-            etabs.Remove(etab);
+            etabs.Remove(etitem);
 
             DataContext.FilterText = string.Empty;
 
-            wtab.TLKTextsSelectedIndex = index;
+            wtitem.TLKTextsSelectedIndex = index;
         }
     }
 
-    public class FilterCountCommand : MarkupCommandExtension<WorkTabItem, (object context, int cnt)>
+    public class FilterCountCommand : MarkupCommandExtension<WorkTabItem, int>
     {
-        protected override void MarkupCommandExecute((object context, int cnt) args)
+        protected override void MarkupCommandExecute(int cnt)
         {
             if (DataContext == null) return;
 
-            DataContext.Edit.FilterCount = args.cnt;
+            DataContext.Work.FilterCount = cnt;
         }
     }
 
-    public class ReplaceTLKTextCommand : MarkupCommandExtension<EditContext, CmdID>
+    public class ReplaceTLKTextCommand : MarkupCommandExtension<WorkContext, CmdID>
     {
-        protected override void MarkupCommandExecute(CmdID args)
+        protected override void MarkupCommandExecute(CmdID id)
         {
             if (DataContext == null) return;
 
             if (string.IsNullOrEmpty(DataContext.FilterText) ||
                 string.IsNullOrEmpty(DataContext.ReplaceText)) return;
 
-            var wtabs = DataContext.WorkTabs;
+            var wtitem = DataContext.TabSelectedItem;
 
-            if (wtabs.Count <= 0) return;
-
-            var wtab = wtabs[DataContext.WorkTabSelectedIndex];
-
-            switch (args)
+            if (wtitem.TLKTexts.IsCompare)
             {
-                case CmdID.Replace:
-                    Replace(wtab); break;
-
-                case CmdID.ReplaceAll:
-                    ReplaceAll(wtab); break;
+                DataContext.MsgPopup.Show("비교 중인 파일은 해당 기능을 사용할 수 없습니다.");
+                return;
             }
 
-            // FilterText 변경 시 Refresh 호출..
-            DataContext.FilterText = DataContext.ReplaceText;
-            DataContext.ReplaceText = string.Empty;
+            switch (id)
+            {
+                case CmdID.Replace:
+                    Replace(wtitem); break;
+
+                case CmdID.ReplaceAll:
+                    ReplaceAll(wtitem); break;
+            }
         }
 
-        private void Replace(WorkTabItem wtab)
+        private void Replace(WorkTabItem item)
         {
-            var item = wtab.TLKTexts.GetTLKText(DataContext.FilterText, true);
+            var TextItem = item.TLKTexts.GetTLKText(DataContext.FilterText, true);
 
-            if (item == null) return;
+            if (TextItem == null) return;
 
-            wtab.TLKTexts.SetTLKText(item.Index, item.Text.Replace(DataContext.FilterText, DataContext.ReplaceText));
+            item.TLKTexts.SetTLKText(TextItem.Index, TextItem.Text.Replace(DataContext.FilterText, DataContext.ReplaceText));
 
-            if (wtab.Edit.FilterCount != 0) return;
+            DataContext.RefreshFilterView();
+
+            if (item.Work.FilterCount != 0) return;
 
             DataContext.MsgPopup.Show(string.Format("지정된 텍스트를 모두 변경했습니다.\n {0}", DataContext.FilterText));
+
+            InitInputText();
         }
 
-        private void ReplaceAll(WorkTabItem wtab)
+        private void ReplaceAll(WorkTabItem item)
         {
-            wtab.TLKTexts.ReplaceAll(DataContext.FilterText, DataContext.ReplaceText, out int total);
+            item.TLKTexts.ReplaceAll(DataContext.FilterText, DataContext.ReplaceText, out int total);
 
             DataContext.MsgPopup.Show(string.Format("총 {0}개 항목을 수정하였습니다.", total));
+
+            InitInputText();
+        }
+
+        private void InitInputText()
+        {
+            DataContext.FilterText = DataContext.ReplaceText;
+            DataContext.ReplaceText = string.Empty;
         }
     }
 }

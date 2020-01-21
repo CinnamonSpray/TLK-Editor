@@ -1,21 +1,22 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
-using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
-using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 
-using TLKMODELS.IO;
-
-namespace TLKMODELS
+namespace TLK.IO.MODELS
 {
     [ComVisible(false)]
     public class TLKTextCollection : ObservableCollection<TLKTEXT>
     {
         public string FilePath { get; set; } = string.Empty;
         public Encoding TextEncoding { get; set; } = Encoding.UTF8;
+        public string TLK_Version { get; private set; }
+
+        public bool IsCompare { get; set; } = false;
 
         public bool InitializeFromFile(string filepath, Encoding encoding)
         {
@@ -26,9 +27,12 @@ namespace TLKMODELS
             FilePath = filepath;
             TextEncoding = encoding;
 
-            using (var fs = new TLKFILE(FilePath, true))
+            using (var fs = TLKFILE.Open(FilePath, true))
             {
+                if (fs == null) return result;
+
                 fs.Encoder = TextEncoding;
+                TLK_Version = fs.Version;
 
                 if (fs.fileLength <= 0) result = false;
 
@@ -52,6 +56,27 @@ namespace TLKMODELS
             return result;
         }
 
+        public byte[] GetTLKEntry(int index)
+        {
+            byte[] result = null;
+            using (var fs = TLKFILE.Open(FilePath))
+            {
+                result = fs.GetEntry(index);
+            }
+
+            return result;
+        }
+
+        public void SetTLKEntry(int index, byte[] entry)
+        {
+            if (string.IsNullOrEmpty(FilePath)) return;
+
+            using (var fs = TLKFILE.Open(FilePath))
+            {
+                fs.SetEntry(index, entry);
+            }
+        }
+
         public TLKTEXT GetTLKText(string searchText, bool direction)
         {
             TLKTEXT result = null;
@@ -65,13 +90,32 @@ namespace TLKMODELS
         {
             if (string.IsNullOrEmpty(FilePath)) return;
 
-            using (var fs = new TLKFILE(FilePath))
+            using (var fs = TLKFILE.Open(FilePath))
             {
                 fs.Encoder = TextEncoding;
 
                 fs.SetText(index, replaceText);
 
                 this[index].Text = replaceText;
+            }
+        }
+
+        public void SetTLKTextBlock(List<(int Index, string text)> list)
+        {
+            if (string.IsNullOrEmpty(FilePath)) return;
+
+            using (var fs = TLKFILE.Open(FilePath, true))
+            {
+                fs.Encoder = TextEncoding;
+
+                var temps = (Items.Select(x => x.Index)).Except(list.Select(x => x.Index));
+
+                foreach (int item in temps)
+                {
+                    list.Insert(item, (Items[item].Index, Items[item].Text));
+                }
+
+                fs.SetTextBlock(list.Select(x=>x.text).ToArray());
             }
         }
 
@@ -86,7 +130,7 @@ namespace TLKMODELS
 
             int cnt = 0;
 
-            using (var fs = new TLKFILE(FilePath))
+            using (var fs = TLKFILE.Open(FilePath))
             {
                 fs.Encoder = TextEncoding;
 
@@ -137,7 +181,7 @@ namespace TLKMODELS
 
             return Item;
         }
-    }
+    }  
 
     public class TLKTEXT
     {
@@ -152,39 +196,7 @@ namespace TLKMODELS
 
         public override string ToString()
         {
-            return Index.ToString() + " " + Text;
-        }
-    }
-
-    [Serializable]
-    public class TLKENTRY
-    {
-        public short Type { get; set; }
-        public ulong ResourceName { get; set; }
-        public int Volume { get; set; }
-        public int Pitch { get; set; }
-        public int Offset { get; set; }
-        public int Length { get; set; }
-
-        public TLKENTRY() { }
-
-        public TLKENTRY(byte[] buff)
-        {
-            Type = BitConverter.ToInt16(buff, 0);
-            ResourceName = BitConverter.ToUInt64(buff, 2);
-            Volume = BitConverter.ToInt32(buff, 10);
-            Pitch = BitConverter.ToInt32(buff, 14);
-            Offset = BitConverter.ToInt32(buff, 18);
-            Length = BitConverter.ToInt32(buff, 22);
-        }
-
-        public byte[] ToByteArray()
-        {
-            var mstream = new MemoryStream();
-
-            new BinaryFormatter().Serialize(mstream, this);
-
-            return mstream.ToArray();
+            return Text;
         }
     }
 }

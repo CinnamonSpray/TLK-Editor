@@ -1,0 +1,74 @@
+﻿<UserControl x:Class="TLKAPP.Views.Merge.CompareControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:cc="clr-namespace:CustomControls;assembly=CustomControls"
+             xmlns:vcv="clr-namespace:TLKAPP.ViewConverter"
+             xmlns:cmd="clr-namespace:TLKVIEWMODLES.Commands;assembly=TLKVIEWMODLES">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="4*"/>
+            <RowDefinition Height="6*"/>
+        </Grid.RowDefinitions>
+
+        <DataGrid Name="CompareGrid" Grid.Row="0" AutoGenerateColumns="False" CanUserAddRows="False" CanUserDeleteRows="False" 
+                  HeadersVisibility="Column" RowDetailsVisibilityMode="Collapsed" IsReadOnly="True" SelectionMode="Single" 
+                  ItemsSource="{Binding TLKInfos}" SelectionChanged="{cmd:GetTLKInfoCommand EvtArgsCvt={vcv:TLKInfoToDetailsConverter}}">
+            <DataGrid.CellStyle>
+                <Style TargetType="DataGridCell">
+                    <Setter Property="BorderThickness" Value="0"/>
+                </Style>
+            </DataGrid.CellStyle>
+            <DataGrid.ItemContainerStyle>
+                <Style TargetType="DataGridRow">
+                    <EventSetter Event="KeyUp" Handler="DataGridRow_KeyUp"/>
+                    <EventSetter Event="KeyDown" Handler="DataGridRow_KeyDown"/>
+                    <EventSetter Event="MouseDoubleClick" Handler="DataGridRow_MouseDoubleClick"/>
+                </Style>
+            </DataGrid.ItemContainerStyle>
+            <DataGrid.RowDetailsTemplate>
+                <DataTemplate>
+                    <Grid Margin="8,4,4,4">
+                        <cc:DotTextBlock FontSize="12" Text="{Binding Details}"/>
+                    </Grid>
+                </DataTemplate>
+            </DataGrid.RowDetailsTemplate>
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Index" FontSize="14" Binding="{Binding Index}"/>
+                <DataGridTemplateColumn Header="Summary" Width="*">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock FontSize="16" TextTrimming="CharacterEllipsis">
+                                <TextBlock.Text>
+                                    <Binding Converter="{vcv:TLKInfoSummaryConverter}" Path="SummaryFlags"/>
+                                </TextBlock.Text>
+                            </TextBlock>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
+        </DataGrid>
+
+        <TabControl Grid.Row="1" Margin="0,4,0,0" Name="ViewTabs" ItemsSource="{Binding Tabs}" SelectedItem="{Binding TabSelectedItem}"
+                    SelectionChanged="{cmd:TextTabSelectedCommand}">
+            <TabControl.ItemTemplate>
+                <DataTemplate>
+                    <TextBlock>
+                        <TextBlock.Inlines>
+                            <Run Text="●" Foreground="{Binding ContextName}"/>
+                            <Run Text=" Text"/>
+                        </TextBlock.Inlines>
+                    </TextBlock>
+                </DataTemplate>
+            </TabControl.ItemTemplate>
+            <TabControl.ContentTemplate>
+                <DataTemplate>
+                    <ScrollViewer>
+                        <cc:DiffTextkBlock TextWrapping="Wrap" FirstText="{Binding FirstText}" SecondText="{Binding SecondText}"
+                                           FontSize="{Binding Settings.FontSize}" FontFamily="{Binding Settings.FontFamilyName}"/>
+                    </ScrollViewer>
+                </DataTemplate>
+            </TabControl.ContentTemplate>
+        </TabControl>
+    </Grid>
+
+</UserControl>

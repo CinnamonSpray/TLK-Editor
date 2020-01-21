@@ -32,4 +32,17 @@ namespace TLKVIEWMODLES.Commands
             config.SettingSave();
         }
     }
+
+    public class TabItemClosedCommand : MarkupCommandExtension<object, object>
+    {
+        protected override void MarkupCommandExecute(object args)
+        {
+            switch (DataContext)
+            {
+                case WorkContext wc: wc.Tabs.Remove((WorkTabItem)args); break;
+                case WorkTabItem wt: wt.Tabs.Remove((EditTabItem)args); break;
+                case MergeContext mc: mc.Tabs.Remove((MergeTabItem)args); break;
+            }
+        }
+    }
 }

@@ -6,9 +6,11 @@
         Index
     }
 
-    public enum CmdID : int
+    public enum CmdID : byte
     {
         Replace,
-        ReplaceAll
+        ReplaceAll,
+        EditView,
+        CompareView
     }
 }

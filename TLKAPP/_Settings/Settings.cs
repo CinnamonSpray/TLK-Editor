@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel;
 using System.Configuration;
 using System.Windows;
 
@@ -21,11 +22,11 @@ namespace TLKAPP.Properties {
             //
         }
         
-        private void SettingChangingEventHandler(object sender, System.Configuration.SettingChangingEventArgs e) {
+        private void SettingChangingEventHandler(object sender, SettingChangingEventArgs e) {
             // SettingChangingEvent 이벤트를 처리하는 코드를 여기에 추가하세요.
         }
         
-        private void SettingsSavingEventHandler(object sender, System.ComponentModel.CancelEventArgs e) {
+        private void SettingsSavingEventHandler(object sender, CancelEventArgs e) {
             // SettingsSaving 이벤트를 처리하는 코드를 여기에 추가하십시오.
         }
     }
@@ -106,7 +107,7 @@ namespace TLKAPP.Properties {
             config.Clear();
 
             config.Add(new ViewXmlTemplate(
-            new Rect(win.Top, win.Left, win.Width, win.Height)));
+                new Rect(win.Top, win.Left, win.Width, win.Height)));
         }
     }
 }

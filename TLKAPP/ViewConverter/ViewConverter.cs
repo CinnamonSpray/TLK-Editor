@@ -1,76 +1,19 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
-using System.Windows.Media;
-using Microsoft.Win32;
 
 using PatternHelper.MVVM.WPF;
 using TLKAPP.Properties;
-using TLKVIEWMODLES.Contexts;
 using TLKVIEWMODLES.Type;
 
 namespace TLKAPP.ViewConverter
 {
-    public class OpenDlg : DialogBehavior<OpenDlg, BaseContext>
-    {
-        public override void OnDialog(BaseContext context)
-        {
-            if (context == null) return;
-
-            var dlg = new OpenFileDialog();
-
-            if (dlg.ShowDialog() != true) return;
-
-            if (string.IsNullOrEmpty(dlg.FileName)) return;
-
-            var tabs = context.Edit.WorkTabs;
-
-            tabs.AddWorkTab(dlg.FileName, context.Settings.TextEncoding);
-
-            context.Edit.WorkTabSelectedIndex = tabs.Count - 1;
-        }
-    }
-
-    public class FontDlg : DialogBehavior<FontDlg, BaseContext>
-    {
-        public override void OnDialog(BaseContext context)
-        {
-            if (context == null) return;
-
-            var dlg = new CustomControls.FontDialog()
-            {
-                Owner = Application.Current.MainWindow,
-                Font = new CustomControls.FontInfo(
-                    new FontFamily(context.Settings.FontFamilyName),
-                    context.Settings.FontSize),
-            };
-
-            if (dlg.ShowDialog() == true)
-            {
-                context.Settings.FontFamilyName = dlg.Font.Family.ToString();
-                context.Settings.FontSize = dlg.Font.Size;
-            }
-        }
-    }
-
-    public class WinCloseArgs : ValuesConverterExtension<WinCloseArgs>
-    {
-        public override object Convert(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            return (Action)delegate { Application.Current.MainWindow.Close(); };
-        }
-
-        public override object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            throw new NotImplementedException();
-        }
-    }
-
-    public class TextEncodingConverter : ValuesConverterExtension<TextEncodingConverter>
+    public class TextEncodingConverter : ValueConverterExtension<TextEncodingConverter>
     {
         public override object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
@@ -85,7 +28,7 @@ namespace TLKAPP.ViewConverter
         }
     }
 
-    public class FilterTypeConverter : ValuesConverterExtension<FilterTypeConverter>
+    public class FilterTypeConverter : ValueConverterExtension<FilterTypeConverter>
     {
         public override object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
@@ -101,13 +44,96 @@ namespace TLKAPP.ViewConverter
         }
     }
 
+    public class FilePathConverter : ValueConverterExtension<FilePathConverter>
+    {
+        public override object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (value == null || string.IsNullOrEmpty(value.ToString())) return string.Empty;
+
+            var fullpath = value.ToString();
+            var splitpath = fullpath.Split('\\');
+
+            if (splitpath.Length < 5 || fullpath.Length > 128) return fullpath;
+
+            return "..." + fullpath.Substring(fullpath.LastIndexOf(splitpath[splitpath.Length - 4]));
+        }
+
+        public override object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
+    public class TLKInfoSummaryConverter : ValueConverterExtension<TLKInfoSummaryConverter>
+    {
+        private string[] SummaryTable_V1 = new string[] { " Type,", " Resource,", " Volume,", " Pitch,", " Text," };
+        private string[] SummaryTable_V3 = new string[] { " Type,", " Resource,", " Volume,", " Pitch,", " SoundLength,", " Text," };
+        private Dictionary<byte, string> SummaryDic = new Dictionary<byte, string>();
+
+        public override object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            var flags = value as BitArray;
+
+            if (flags == null) return Binding.DoNothing;
+
+            if (SummaryDic.TryGetValue(ConvertByte(flags), out string result))
+                return result;
+
+            else
+                return CreateSummary(flags);
+        }
+
+        public override object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+
+        private string CreateSummary(BitArray flags)
+        {
+            string result = string.Empty;
+            int flagscnt = flags.Length;
+            string[] table = null;
+
+            switch(flagscnt)
+            {
+                case 5: table = SummaryTable_V1; break;
+                case 6: table = SummaryTable_V3; break;
+            }
+
+            for (int i = 0; i < flagscnt; i++)
+                if (flags[i]) result += table[i];
+
+            if (string.IsNullOrEmpty(result)) return result;
+
+            SummaryDic.Add(ConvertByte(flags), result.TrimEnd(','));
+
+            table = null;
+
+            return SummaryDic[ConvertByte(flags)];
+        }
+
+        private static byte ConvertByte(BitArray flags)
+        {
+            var keybuf = new byte[1];
+            flags.CopyTo(keybuf, 0);
+
+            return keybuf[0];
+        }
+    }
+
     public class SettingConverter : EventArgsConverterExtension<SettingConverter>
     {
+        private static ConfigArgs _configArgs = null;
+
         public override object Convert(object value, object parameter)
         {
             var fe = value as FrameworkElement;
 
-            return fe == null ? null : new ConfigArgs(fe);
+            if (fe == null) return null;
+
+            if (_configArgs == null) _configArgs = new ConfigArgs(fe);
+
+            return _configArgs;
         }
 
         private class ConfigArgs : ConfigEvtArgs
@@ -121,7 +147,7 @@ namespace TLKAPP.ViewConverter
 
             public string FontFamilyName { get; set; }
             public double FontSize { get; set; }
-            public string TextEncoding { get; set; }
+            public string TextEncoding { get; set; } 
 
             public void SettingLoad()
             {
@@ -136,7 +162,7 @@ namespace TLKAPP.ViewConverter
                         "Malgun Gothic" : Settings.Default.FontConfig.FamilyName;
 
                     FontSize = Settings.Default.FontConfig.Size == 0.0 ?
-                            12 : Settings.Default.FontConfig.Size;
+                            12.0 : Settings.Default.FontConfig.Size;
 
                     TextEncoding = string.IsNullOrEmpty(Settings.Default.TextEncoding) ?
                         "utf-8" : Settings.Default.TextEncoding;
@@ -150,9 +176,7 @@ namespace TLKAPP.ViewConverter
                     ViewConfig.Save((Window)_fe);
 
                     Settings.Default.FontConfig.FamilyName = FontFamilyName;
-
                     Settings.Default.FontConfig.Size = FontSize;
-
                     Settings.Default.TextEncoding = TextEncoding;
 
                     Settings.Default.Save();
@@ -168,30 +192,23 @@ namespace TLKAPP.ViewConverter
             var lstbox = value as ListBox;
 
             if (lstbox != null)
-            {
-                return new TLKTextViewArgs(lstbox.ItemsSource);
-            }
+                return new TLKTextViewArgs(lstbox);
 
-            return Binding.DoNothing;
+            return null;
         }
 
         private class TLKTextViewArgs : InitCollectionEvtArgs
         {
+            private ICollectionView _collection;
+
             public Predicate<object> Filter
             {
                 set { _collection.Filter = value; }
             }
 
-            public Action Refresh
+            public TLKTextViewArgs(ListBox lstbox)
             {
-                get { return _collection.Refresh; }
-            }
-
-            private ICollectionView _collection;
-
-            public TLKTextViewArgs(IEnumerable collection)
-            {
-                _collection = (ICollectionView)collection;
+                _collection = (ICollectionView)lstbox.ItemsSource;
             }
         }
     }
@@ -212,7 +229,7 @@ namespace TLKAPP.ViewConverter
                 return result;
             }
 
-            return Binding.DoNothing;
+            return null;
         }
     }
 
@@ -222,17 +239,33 @@ namespace TLKAPP.ViewConverter
         {
             var lstbox = value as ListBox;
 
-            if (lstbox != null)
-            {
-                (object DataContext, int Count) result;
+            if (lstbox != null) return lstbox.Items.Count;
 
-                result.DataContext = lstbox.DataContext;
-                result.Count = lstbox.Items.Count;
+            return null;
+        }
+    }
 
-                return result;
-            }
+    public class TLKInfoToDetailsConverter : EventArgsConverterExtension<TLKInfoToDetailsConverter>
+    {
+        public override object Convert(object value, object parameter)
+        {
+            var args = parameter as SelectionChangedEventArgs;
 
-            return Binding.DoNothing;
+            if (args != null && args.AddedItems.Count > 0) return args.AddedItems[0];
+
+            return null;
+        }
+    }
+
+    public class TabCloseConverter : EventArgsConverterExtension<TabCloseConverter>
+    {
+        public override object Convert(object value, object parameter)
+        {
+            var args = parameter as RoutedEventArgs;
+
+            if (args != null) return args.OriginalSource;
+
+            return null;
         }
     }
 }

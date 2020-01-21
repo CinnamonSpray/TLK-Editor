@@ -4,7 +4,7 @@ namespace TLKVIEWMODLES.Contexts
 {
     public class SettingsContext : ViewModelBase
     {
-        private string _FontFamilyName;
+        private string _FontFamilyName = "Malgun Gothic";
         public string FontFamilyName
         {
             get { return _FontFamilyName; }
@@ -14,7 +14,7 @@ namespace TLKVIEWMODLES.Contexts
             }
         }
 
-        private double _FontSize;
+        private double _FontSize = 12.0;
         public double FontSize
         {
             get { return _FontSize; }
@@ -24,7 +24,7 @@ namespace TLKVIEWMODLES.Contexts
             }
         }
 
-        private string _TextEnconding;
+        private string _TextEnconding = "utf-8";
         public string TextEncoding
         {
             get { return _TextEnconding; }

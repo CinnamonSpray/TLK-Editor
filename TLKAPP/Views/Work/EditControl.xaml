@@ -1,0 +1,40 @@
+﻿<cc:CustomUserControl x:Class="TLKAPP.Views.Edit.EditControl"
+                      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                      xmlns:cc="clr-namespace:CustomControls;assembly=CustomControls"
+                      xmlns:vcv="clr-namespace:TLKAPP.ViewConverter"
+                      xmlns:cmd="clr-namespace:TLKVIEWMODLES.Commands;assembly=TLKVIEWMODLES">
+    <UniformGrid Rows="2">
+
+        <cc:FilterListBox Grid.Row="0" Name="FilterListBox" ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                          SelectedIndex="{Binding TLKTextsSelectedIndex}" ViewSource="{Binding TLKTexts}"
+                          SelectedItem="{Binding Work.SelectedTLKTEXT}"
+                          FontSize="{Binding Settings.FontSize}" FontFamily="{Binding Settings.FontFamilyName}"
+                          MouseDoubleClick="{cmd:GetTLKTextCommand EvtArgsCvt={vcv:TLKTextSelectedItemConverter}}"
+                          RegisterView="{cmd:InitTLKTextCommand EvtArgsCvt={vcv:TLKTextViewConverter}}"
+                          ViewCount="{cmd:FilterCountCommand EvtArgsCvt={vcv:TLKTextsCountConverter}}">
+            <cc:FilterListBox.ItemTemplate>
+                <DataTemplate>
+                    <cc:HighlightTextBlock
+                        Text="{Binding}" TextWrapping="Wrap" HighlightBrush="Orange"
+                        HighlightPhrase="{Binding ElementName=FilterListBox, Path=DataContext.Work.FilterText}"
+                        IsCaseSensitive="{Binding ElementName=FilterListBox, Path=DataContext.Work.FilterOrdinal}">
+                    </cc:HighlightTextBlock>
+                </DataTemplate>
+            </cc:FilterListBox.ItemTemplate>
+        </cc:FilterListBox>
+
+        <cc:CustomTabControl Grid.Row="1" Margin="0,4,0,0" ItemsSource="{Binding Tabs}" SelectedItem="{Binding TabSelectedItem}" 
+                             TabItemClosed="{cmd:TabItemClosedCommand EvtArgsCvt={vcv:TabCloseConverter}}">
+
+            <cc:CustomTabControl.ContentTemplate>
+                <DataTemplate>
+                    <TextBox AcceptsReturn="True" TextWrapping="Wrap" Text="{Binding TranslateText}"
+                             FontSize="{Binding Settings.FontSize}" FontFamily="{Binding Settings.FontFamilyName}"/>
+                </DataTemplate>
+            </cc:CustomTabControl.ContentTemplate>
+
+        </cc:CustomTabControl>
+
+    </UniformGrid>
+</cc:CustomUserControl>

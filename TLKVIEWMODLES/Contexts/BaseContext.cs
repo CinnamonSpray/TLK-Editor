@@ -1,17 +1,18 @@
 ﻿using System.Collections.Generic;
-
+using System.Collections.ObjectModel;
 using PatternHelper.MVVM.WPF;
-using TLKMODELS;
+using TLK.IO.MODELS;
 
 namespace TLKVIEWMODLES.Contexts
 {
-    public class BaseContext : ViewModelBase
+    public class BaseContext : TLKContext
     {
         private GlobalContexts _Global;
 
-        public SettingsContext Settings { get; private set; }
-        public MessageContext MsgPopup { get; private set; }
-        public EditContext Edit { get; private set; }
+        public WorkContext Work { get; private set; }
+        public MergeContext Merge { get; private set; }
+
+        public ObservableCollection<ViewModelBase> Contexts { get; } = new ObservableCollection<ViewModelBase>();
 
         public BaseContext()
         {
@@ -19,43 +20,13 @@ namespace TLKVIEWMODLES.Contexts
             Settings = _Global.Settings;
             MsgPopup = _Global.MsgPopup;
 
-            Edit = new EditContext(_Global);
+            Work = new WorkContext(_Global);
+            Merge = new MergeContext(_Global);
 
-            CurrentContext = Edit;
-        }
+            Contexts.Add(Work);
+            Contexts.Add(Merge);
 
-        private bool _OpenDlg;
-        public bool OpenDlg
-        {
-            get { return _OpenDlg; }
-            set
-            {
-                SetField(ref _OpenDlg, value, nameof(OpenDlg));
-
-                if (value) OpenDlg ^= value;
-            }
-        }
-
-        private bool _FontDlg;
-        public bool FontDlg
-        {
-            get { return _FontDlg; }
-            set
-            {
-                SetField(ref _FontDlg, value, nameof(FontDlg));
-
-                if (value) FontDlg ^= value;
-            }
-        }
-
-        private object _CurrentContext;
-        public object CurrentContext
-        {
-            get { return _CurrentContext; }
-            set
-            {
-                SetField(ref _CurrentContext, value, nameof(CurrentContext));
-            }
+            Work.IsSelected = true;
         }
 
         #region Private Class Type

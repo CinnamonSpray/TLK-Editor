@@ -26,7 +26,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <LangVersion>default</LangVersion>
+    <LangVersion>7.2</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -37,6 +37,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <DebugSymbols>true</DebugSymbols>
+    <LangVersion>7.3</LangVersion>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Costura, Version=1.6.2.0, Culture=neutral, PublicKeyToken=9919ef960d84173d, processorArchitecture=MSIL">
@@ -44,8 +45,8 @@
       <Private>False</Private>
     </Reference>
     <Reference Include="System" />
-    <Reference Include="System.ValueTuple, Version=4.0.2.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.ValueTuple.4.4.0\lib\netstandard1.0\System.ValueTuple.dll</HintPath>
+    <Reference Include="System.ValueTuple, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.ValueTuple.4.5.0\lib\netstandard1.0\System.ValueTuple.dll</HintPath>
     </Reference>
     <Reference Include="System.Xaml">
       <RequiredTargetFramework>4.0</RequiredTargetFramework>
@@ -68,35 +69,36 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="ViewConverter\ViewConverter.cs" />
-    <Compile Include="Views\Compare\CompareContent.xaml.cs">
-      <DependentUpon>CompareContent.xaml</DependentUpon>
+    <Compile Include="ViewConverter\ViewModelService.cs" />
+    <Compile Include="Views\Merge\MergeContent.xaml.cs">
+      <DependentUpon>MergeContent.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Edit\EditControl.xaml.cs">
+    <Compile Include="Views\Merge\CompareControl.xaml.cs">
+      <DependentUpon>CompareControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Work\EditControl.xaml.cs">
       <DependentUpon>EditControl.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Edit\FilterControl.xaml.cs">
-      <DependentUpon>FilterControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Menu\MenuControl.xaml.cs">
       <DependentUpon>MenuControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Edit\EditContent.xaml.cs">
-      <DependentUpon>EditContent.xaml</DependentUpon>
+    <Compile Include="Views\Work\WorkContent.xaml.cs">
+      <DependentUpon>WorkContent.xaml</DependentUpon>
     </Compile>
     <Compile Include="_Settings\Settings.cs" />
     <Compile Include="Views\BaseWindow.xaml.cs">
       <DependentUpon>BaseWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="Views\Compare\CompareContent.xaml">
+    <Page Include="Views\Merge\MergeContent.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\Edit\EditControl.xaml">
+    <Page Include="Views\Merge\CompareControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\Edit\FilterControl.xaml">
+    <Page Include="Views\Work\EditControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -104,7 +106,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\Edit\EditContent.xaml">
+    <Page Include="Views\Work\WorkContent.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

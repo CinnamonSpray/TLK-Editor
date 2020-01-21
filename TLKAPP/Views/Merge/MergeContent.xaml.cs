@@ -3,11 +3,11 @@
 namespace TLKAPP.Views
 {
     /// <summary>
-    /// EditControl.xaml에 대한 상호 작용 논리
+    /// CompareContent.xaml에 대한 상호 작용 논리
     /// </summary>
-    public partial class EditControl : UserControl
+    public partial class MergeContent : UserControl
     {
-        public EditControl()
+        public MergeContent()
         {
             InitializeComponent();
         }

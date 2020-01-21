@@ -1,4 +1,5 @@
-﻿using System.Windows.Controls;
+﻿using System.Windows;
+using System.Windows.Controls;
 
 namespace TLKAPP.Views
 {
@@ -10,6 +11,11 @@ namespace TLKAPP.Views
         public MenuControl()
         {
             InitializeComponent();
+        }
+
+        private void MenuCloseItem_Click(object sender, RoutedEventArgs e)
+        {
+            Application.Current.MainWindow.Close();
         }
     }
 }
