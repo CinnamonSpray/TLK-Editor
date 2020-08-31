@@ -226,7 +226,7 @@ namespace TLKVIEWMODLES.Commands
         {
             if (DataContext == null || dlgsvc == null) return;
 
-            var fontinfo = dlgsvc.FontDialogService();
+            var fontinfo = dlgsvc.FontDialogService(DataContext.Settings.FontFamilyName, DataContext.Settings.FontSize);
 
             if (string.IsNullOrEmpty(fontinfo.fontfamily)) return;
 

@@ -108,6 +108,8 @@ namespace TLKAPP.Properties {
 
             config.Add(new ViewXmlTemplate(
                 new Rect(win.Top, win.Left, win.Width, win.Height)));
+
+            Settings.Default.Save();
         }
     }
 }

@@ -6,11 +6,10 @@ namespace TLKVIEWMODLES.Type
 {
     public interface IDialogService
     {
-        // 매개변수로 필터값 넘길것...
         string OpenFileService(string filter);
         string SaveFileService();
 
-        (string fontfamily, double fontsize) FontDialogService();
+        (string fontfamily, double fontsize) FontDialogService(string savedfont, double savedsize);
     }
 
     public interface ConfigEvtArgs

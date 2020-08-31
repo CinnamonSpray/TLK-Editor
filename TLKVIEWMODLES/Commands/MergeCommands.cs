@@ -11,8 +11,6 @@ namespace TLKVIEWMODLES.Commands
             if (DataContext.TLKs == null || DataContext.TLKs.Count <= 0) return;
 
             // 탭이 없는데 파일경로는 남아 있는 버그가 디버깅 모드에서 한번 보임... 
-            // 경로를 찾을 수 없어 아래 리프레쉬 임시방편 추가...
-            // DataContext.PathListRefresh();
 
             if (string.IsNullOrEmpty(DataContext.FirstPath) ||  string.IsNullOrEmpty(DataContext.SecondPath))
             {

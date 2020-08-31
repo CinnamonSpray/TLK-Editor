@@ -102,15 +102,17 @@ namespace TLK.IO
             var MAXCNT = 524288;
 
             using (var fs = new FileStream(path, FileMode.Open))
-            using (var br = new BinaryReader(fs))
             {
-                var cnt = fs.Length / MAXCNT;
-                var mod = fs.Length % MAXCNT;
+                using (var br = new BinaryReader(fs))
+                {
+                    var cnt = fs.Length / MAXCNT;
+                    var mod = fs.Length % MAXCNT;
 
-                for (int i = 0; i < cnt; i++)
-                    SplitTraText(br.ReadBytes(MAXCNT), encoding, ref TraBytes);
+                    for (int i = 0; i < cnt; i++)
+                        SplitTraText(br.ReadBytes(MAXCNT), encoding, ref TraBytes);
 
-                SplitTraText(br.ReadBytes((int)mod), encoding, ref TraBytes);
+                    SplitTraText(br.ReadBytes((int)mod), encoding, ref TraBytes);
+                }
             }
 
             if (TraBytes.Count <= 0) return false;

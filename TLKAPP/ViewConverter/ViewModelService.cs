@@ -10,7 +10,7 @@ namespace TLKAPP.ViewModelService
 {
     public class DialogService : NomalMarkup<DialogService>, IDialogService
     {
-        public (string fontfamily, double fontsize) FontDialogService()
+        public (string fontfamily, double fontsize) FontDialogService(string savedfont, double savedsize)
         {
             var result = (string.Empty, 0.0);
 
@@ -18,8 +18,7 @@ namespace TLKAPP.ViewModelService
             {
                 Owner = Application.Current.MainWindow,
                 Font = new CustomControls.FontInfo(
-                    new FontFamily(Settings.Default.FontConfig.FamilyName),
-                    Settings.Default.FontConfig.Size),
+                    new FontFamily(savedfont), savedsize),
             };
 
             if (dlg.ShowDialog() == true)

@@ -47,8 +47,8 @@
                 </Grid>
             </Grid>
 
-            <Grid Grid.Row="1" Margin="20,0,0,0" 
-              IsEnabled="{Binding FilterType, Converter={vcv:FilterTypeConverter}, ConverterParameter={StaticResource FilterText}}">
+            <Grid Grid.Row="1" Margin="20,0,0,0"
+                  IsEnabled="{Binding FilterType, Converter={vcv:FilterTypeConverter}, ConverterParameter={StaticResource FilterText}}">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="64"/>
                     <ColumnDefinition/>
@@ -67,7 +67,7 @@
                 </Grid>
 
                 <TextBox Grid.Column="1" Text="{Binding ReplaceText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                     FontSize="16" FontFamily="{Binding Settings.FontFamilyName}"/>
+                         FontSize="16" FontFamily="{Binding Settings.FontFamilyName}"/>
             </Grid>
         </Grid>
         
